@@ -17,7 +17,7 @@
                BlueprintIdentifier = "A328FAAC25FD8A5300B9CE72"
                BuildableName = "ResponsiveTextFieldDemo.app"
                BlueprintName = "ResponsiveTextFieldDemo"
-               ReferencedContainer = "container:ResponsiveTextFieldDemo.xcodeproj">
+               ReferencedContainer = "container:Demo Project/ResponsiveTextFieldDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,7 +47,7 @@
             BlueprintIdentifier = "A328FAAC25FD8A5300B9CE72"
             BuildableName = "ResponsiveTextFieldDemo.app"
             BlueprintName = "ResponsiveTextFieldDemo"
-            ReferencedContainer = "container:ResponsiveTextFieldDemo.xcodeproj">
+            ReferencedContainer = "container:Demo Project/ResponsiveTextFieldDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -64,7 +64,7 @@
             BlueprintIdentifier = "A328FAAC25FD8A5300B9CE72"
             BuildableName = "ResponsiveTextFieldDemo.app"
             BlueprintName = "ResponsiveTextFieldDemo"
-            ReferencedContainer = "container:ResponsiveTextFieldDemo.xcodeproj">
+            ReferencedContainer = "container:Demo Project/ResponsiveTextFieldDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
