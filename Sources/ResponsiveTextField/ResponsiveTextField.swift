@@ -59,13 +59,16 @@ public struct ResponsiveTextField {
     /// If this is not set, the textfield delegate will indicate that the return key is not handled.
     var handleReturn: (() -> Void)?
 
+    var shouldChange: ((String, String) -> Bool)?
+
     public init(
         placeholder: String,
         text: Binding<String>,
         isEditing: Binding<Bool>,
         isSecure: Bool = false,
         configuration: Configuration = .empty,
-        handleReturn: (() -> Void)? = nil
+        handleReturn: (() -> Void)? = nil,
+        shouldChange: ((String, String) -> Bool)? = nil
     ) {
         self.placeholder = placeholder
         self.text = text
@@ -73,6 +76,7 @@ public struct ResponsiveTextField {
         self.isSecure = isSecure
         self.configuration = configuration
         self.handleReturn = handleReturn
+        self.shouldChange = shouldChange
     }
 }
 
@@ -153,6 +157,22 @@ extension ResponsiveTextField: UIViewRepresentable {
                 return true
             }
             return false
+        }
+
+        public func textField(
+            _ textField: UITextField,
+            shouldChangeCharactersIn range: NSRange,
+            replacementString string: String
+        ) -> Bool {
+            if let shouldChange = parent.shouldChange {
+                let currentText = textField.text ?? ""
+                guard let newRange = Range(range, in: currentText) else {
+                    return false // when would this conversion fail?
+                }
+                let newText = currentText.replacingCharacters(in: newRange, with: string)
+                return shouldChange(currentText, newText)
+            }
+            return true
         }
 
         @objc func textFieldTextChanged(_ textField: UITextField) {
@@ -260,7 +280,8 @@ struct ResponsiveTextField_Previews: PreviewProvider {
                 placeholder: "Placeholder",
                 text: $text,
                 isEditing: $isEditing,
-                configuration: configuration
+                configuration: configuration,
+                shouldChange: { $1.count <= 10 }
             )
             .fixedSize(horizontal: false, vertical: true)
             .padding()
