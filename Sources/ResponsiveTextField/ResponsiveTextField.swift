@@ -173,6 +173,10 @@ extension ResponsiveTextField {
     public struct Configuration {
         var configure: (UITextField) -> Void
 
+        public init(configure: @escaping (UITextField) -> Void) {
+            self.configure = configure
+        }
+
         public static func combine(_ configurations: Self...) -> Self {
             combine(configurations)
         }
