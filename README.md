@@ -47,8 +47,8 @@ status.
 
 ```swift
 struct ExampleView: View {
-  @State var email: String
-  @State var isEditingEmail: Bool
+  @State var email: String = ""
+  @State var isEditingEmail: Bool = false
 
   var body: some View {
     VStack {
@@ -209,6 +209,101 @@ public extension ResponsiveTextField.Configuration {
     .noCorrection,
     .clearWhileEditing
   )
+}
+```
+
+## First Responder Control
+
+`ResponsiveTextField` uses the SwiftUI binding system to give programmatic
+control over the first responder status of the control. This is one of the
+major pieces of missing behaviour from the native `TextField` type.
+
+The control is passed a `Binding<Bool>` on initialisation which allows two-way
+communication about the text field's responder state. When the user taps on
+the text field, it will become first responder unless it has been disabled.
+This will update the state that the binding was derived from to `true`.
+Similarly, if another control becomes first responder, the text field will
+resign it's first responder status and set the underlying state to `false`.
+
+Update the external state will update the text field and will make it become
+or resign first responder. For example, on a screen with two text fields, you
+could make the first text field become first responder automatically, causing
+the keyboard to appear when the view is shown, by simply setting the default
+value of the state to `true`:
+
+```swift
+struct ExampleView: View {
+  @State var email: String = ""
+  @State var password: String = ""
+  @State var isEditingEmail: Bool = true
+  @State var isEditingPassword: Bool = false
+
+  var body: some View {
+    VStack {
+      /// This field will become first responder automatically
+      ResponsiveTextField(
+          placeholder: "Email address",
+          text: $email,
+          isEditing: $isEditingEmail
+      )
+      ResponsiveTextField(
+          placeholder: "Password",
+          text: $password,
+          isEditing: $isEditingPassword
+      )
+    }
+  }
+}
+```
+
+You could also trigger the field to become first responder after a short
+delay after appearing:
+
+```swift
+VStack {
+  ResponsiveTextField(
+      placeholder: "Email address",
+      text: $email,
+      isEditing: $isEditingEmail
+  )
+}
+.onAppear {
+  DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+    isEditingEmail = true
+  }
+}
+```
+
+You could also use the built-in keyboard handling closure to move from one
+field to the next when the keyboard return button is tapped:
+
+```swift
+struct ExampleView: View {
+  @State var email: String = ""
+  @State var password: String = ""
+  @State var isEditingEmail: Bool = true
+  @State var isEditingPassword: Bool = false
+
+  var body: some View {
+    VStack {
+      /// Tapping return will make the password field first responder
+      ResponsiveTextField(
+          placeholder: "Email address",
+          text: $email,
+          isEditing: $isEditingEmail,
+          configuration: .emailField,
+          handleReturn: { isEditingPassword = true }
+      )
+      /// Tapping return will resign first responder and hide the keyboard
+      ResponsiveTextField(
+          placeholder: "Password",
+          text: $password,
+          isEditing: $isEditingPassword,
+          configuration: .passwordField,
+          handleReturn: { isEditingPassword = false }
+      )
+    }
+  }
 }
 ```
 
