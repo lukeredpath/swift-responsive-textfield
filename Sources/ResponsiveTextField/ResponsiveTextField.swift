@@ -272,18 +272,22 @@ public extension ResponsiveTextField.Configuration {
 // MARK: - View Modifiers
 
 public extension View {
+    /// Sets the keyboard return key type on any child `ResponsiveTextField` views.
     func responsiveKeyboardReturnType(_ returnType: UIReturnKeyType) -> some View {
         environment(\.keyboardReturnKeyType, returnType)
     }
 
+    /// Sets the text field font on any child `ResponsiveTextField` views.
     func responsiveTextFieldFont(_ font: UIFont) -> some View {
         environment(\.textFieldFont, font)
     }
 
+    /// Sets the text field text color on any child `ResponsiveTextField` views.
     func responsiveTextFieldTextColor(_ color: UIColor) -> some View {
         environment(\.textFieldTextColor, color)
     }
 
+    /// Sets the text field text alignment on any child `ResponsiveTextField` views.
     func responsiveTextFieldTextAlignment(_ alignment: NSTextAlignment) -> some View {
         environment(\.textFieldTextAlignment, alignment)
     }
