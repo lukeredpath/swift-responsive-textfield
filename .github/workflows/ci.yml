@@ -12,17 +12,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
+    - name: Build and Run Tests
       uses: sersoft-gmbh/xcodebuild-action@v1.3
       with:
         workspace: ResponsiveTextField.xcworkspace
         scheme: ResponsiveTextField
         destination: "platform=iOS Simulator,OS=14.4,name=iPhone 12"
-        action: build-for-testing
-    - name: Run Tests
-      uses: sersoft-gmbh/xcodebuild-action@v1.3
-      with:
-        workspace: ResponsiveTextField.xcworkspace
-        scheme: ResponsiveTextField
-        destination: "platform=iOS Simulator,OS=14.4,name=iPhone 12"
-        action: test-without-building
+        action: test
