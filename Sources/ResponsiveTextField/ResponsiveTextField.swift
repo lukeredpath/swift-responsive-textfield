@@ -167,12 +167,10 @@ extension ResponsiveTextField: UIViewRepresentable {
         }
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
-            guard !isEditing else { return }
             parent.skippingViewUpdates { self.isEditing = true }
         }
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
-            guard isEditing else { return }
             parent.skippingViewUpdates { self.isEditing = false }
         }
 
