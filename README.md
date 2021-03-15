@@ -16,18 +16,19 @@ At a high level, it provides:
   control the text field's first responder status.
 * The ability to set the text field's placeholder.
 * Support for secure text entry.
-* The ability to handle return key taps.
+* The ability to handle return key and delete key taps.
 * The ability to style the text field using SwiftUI-style view modifiers.
 * Support for enabling and disabling the text field using the SwiftUI
   Environment.
 * A composable configuration system for detailed configuration of the underlying
   UITextField.
+* Control over how and when text editing should be permitted.
 
 The following features are not currently supported:
 
 * Control over if the text field should begin or end editing using the
   UITextFieldDelegate methods.
-* Control over how text should be replaced or cleared.
+* Control over how text should be cleared.
 * Managing the text selection.
 * Any of the built-in attributed string supporting APIs.
 
