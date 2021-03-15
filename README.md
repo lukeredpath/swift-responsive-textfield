@@ -1,5 +1,8 @@
 # ResponsiveTextField
 
+[![CI](https://github.com/lukeredpath/swift-responsive-textfield/actions/workflows/ci.yml/badge.svg)](https://github.com/lukeredpath/swift-responsive-textfield/actions/workflows/ci.yml)
+[![GitHub license](https://img.shields.io/github/license/lukeredpath/swift-responsive-textfield.svg)](https://github.com/lukeredpath/swift-responsive-textfield/blob/master/LICENSE)
+
 This library aims to achieve one goal, which is provide a reasonably flexible
 and useful SwiftUI wrapper around UITextField that provides more control over
 it's first responder status, one of the most glaring omissions from SwiftUI's
