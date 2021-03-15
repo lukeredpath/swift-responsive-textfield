@@ -17,10 +17,10 @@ struct ContentView: View {
     var password: String = ""
 
     @State
-    var isEditingEmail: Bool = true
+    var emailResponderState: ResponsiveTextField.FirstResponderState = .become
 
     @State
-    var isEditingPassword: Bool = false
+    var passwordResponderState: ResponsiveTextField.FirstResponderState = .resigned
 
     @State
     var isEnabled: Bool = true
@@ -28,15 +28,29 @@ struct ContentView: View {
     @State
     var hidePassword: Bool = true
 
+    var isEditingEmail: Binding<Bool> {
+        Binding(
+            get: { emailResponderState == .current },
+            set: { emailResponderState = $0 ? .become : .resign }
+        )
+    }
+
+    var isEditingPassword: Binding<Bool> {
+        Binding(
+            get: { passwordResponderState == .current },
+            set: { passwordResponderState = $0 ? .become : .resign }
+        )
+    }
+
     var body: some View {
         NavigationView {
             VStack {
                 ResponsiveTextField(
                     placeholder: "Email address",
                     text: $email,
-                    isEditing: $isEditingEmail.animation(),
+                    firstResponderState: $emailResponderState.animation(),
                     configuration: .email,
-                    handleReturn: { isEditingPassword = true }
+                    handleReturn: { passwordResponderState = .become }
                 )
                 .responsiveKeyboardReturnType(.next)
                 .responsiveTextFieldTextColor(.blue)
@@ -48,11 +62,15 @@ struct ContentView: View {
                     ResponsiveTextField(
                         placeholder: "Password",
                         text: $password,
-                        isEditing: $isEditingPassword.animation(),
+                        firstResponderState: $passwordResponderState.animation(),
                         isSecure: hidePassword,
                         configuration: .combine(.password, .lastOfChain),
-                        handleReturn: { isEditingPassword = false },
-                        handleDelete: { isEditingEmail = $0.isEmpty }
+                        handleReturn: { passwordResponderState = .resign },
+                        handleDelete: {
+                            if $0.isEmpty {
+                                emailResponderState = .become
+                            }
+                        }
                     )
                     .fixedSize(horizontal: false, vertical: true)
                     .disabled(!isEnabled)
@@ -66,10 +84,10 @@ struct ContentView: View {
                 }
                 .padding(.bottom)
 
-                Toggle("Editing Email?", isOn: $isEditingEmail)
+                Toggle("Editing Email?", isOn: isEditingEmail)
                     .padding(.bottom)
 
-                Toggle("Editing Password?", isOn: $isEditingPassword)
+                Toggle("Editing Password?", isOn: isEditingPassword)
                     .padding(.bottom)
 
                 Toggle("Hide Password?", isOn: $hidePassword)

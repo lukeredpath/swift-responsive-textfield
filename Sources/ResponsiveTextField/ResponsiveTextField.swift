@@ -16,13 +16,17 @@ public struct ResponsiveTextField {
     /// A binding to the text state that will hold the typed text
     let text: Binding<String>
 
-    /// A binding to the editing state of the text field.
+    /// A binding to control the first responder state of the text field.
     ///
-    /// This will synchronise with the textfield's first responder state - it will get updated
-    /// if the user taps on the textfield (making it first responder) or if the text field resigns
-    /// first responder status. It can also allow the containing view to manually control
-    /// the first responder state by setting it to true or false.
-    let isEditing: Binding<Bool>
+    /// If the text field becomes or resigns first responder as a result of a user interaction,
+    /// this will be updated to `.current` or `.resigned` when the text field indicates
+    /// that it has started or finished editing.
+    ///
+    /// You can programatically set this to a value of `.become` to become first responder
+    /// or `.resign` to resign first responder. Programatically setting it to any other value
+    /// will not have any effect on the first responder state (it can only become `.current`
+    /// or `.resigned` when the system indicates that its responder state has changed).
+    let firstResponderState: Binding<FirstResponderState>
 
     /// Enables secure text entry.
     ///
@@ -80,7 +84,8 @@ public struct ResponsiveTextField {
     public init(
         placeholder: String,
         text: Binding<String>,
-        isEditing: Binding<Bool>,
+        //isEditing: Binding<Bool>,
+        firstResponderState: Binding<FirstResponderState>,
         isSecure: Bool = false,
         configuration: Configuration = .empty,
         handleReturn: (() -> Void)? = nil,
@@ -89,7 +94,7 @@ public struct ResponsiveTextField {
     ) {
         self.placeholder = placeholder
         self.text = text
-        self.isEditing = isEditing
+        self.firstResponderState = firstResponderState
         self.isSecure = isSecure
         self.configuration = configuration
         self.handleReturn = handleReturn
@@ -101,6 +106,13 @@ public struct ResponsiveTextField {
         shouldUpdateView = false
         callback()
         shouldUpdateView = true
+    }
+
+    public enum FirstResponderState: Equatable {
+        case resigned
+        case become
+        case current
+        case resign
     }
 }
 
@@ -141,10 +153,10 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.returnKeyType = returnKeyType
         uiView.font = font
 
-        switch (uiView.isFirstResponder, isEditing.wrappedValue) {
-        case (true, false):
+        switch (uiView.isFirstResponder, firstResponderState.wrappedValue) {
+        case (true, .resign):
             uiView.resignFirstResponder()
-        case (false, true):
+        case (false, .become):
             uiView.becomeFirstResponder()
         default:
             break
@@ -158,20 +170,20 @@ extension ResponsiveTextField: UIViewRepresentable {
         var text: String
 
         @Binding
-        var isEditing: Bool
+        var firstResponderState: FirstResponderState
 
         init(textField: ResponsiveTextField) {
             self.parent = textField
             self._text = textField.text
-            self._isEditing = textField.isEditing
+            self._firstResponderState = textField.firstResponderState
         }
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
-            parent.skippingViewUpdates { self.isEditing = true }
+            parent.skippingViewUpdates { self.firstResponderState = .current }
         }
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
-            parent.skippingViewUpdates { self.isEditing = false }
+            parent.skippingViewUpdates { self.firstResponderState = .resigned }
         }
 
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -309,13 +321,13 @@ struct ResponsiveTextField_Previews: PreviewProvider {
         var text: String = ""
 
         @State
-        var isEditing: Bool = false
+        var firstResponderState: ResponsiveTextField.FirstResponderState = .resigned
 
         var body: some View {
             ResponsiveTextField(
                 placeholder: "Placeholder",
                 text: $text,
-                isEditing: $isEditing,
+                firstResponderState: $firstResponderState,
                 configuration: configuration,
                 shouldChange: { $1.count <= 10 }
             )
