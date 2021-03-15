@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResponsiveTextField - ResponsiveTextField.Configuration</title>
+    <link rel="stylesheet" type="text/css" href="/swift-responsive-textfield/all.css" media="all" />
+</head>
+<body>
+    <header>
+        <a href="/swift-responsive-textfield/">
+            <strong>
+                ResponsiveTextField
+            </strong>
+            <span>Documentation</span>
+        </a>
+        <sup>Beta</sup>
+    </header>
+
+    <!--
+    <form class="search">
+        <input type="search" placeholder="Search" />
+    </form>
+    -->
+
+    <nav>
+        <div class="wrapper">
+            <h2>On This Page</h2>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Member Of</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#responsivetextfield.configuration.init(configure:)">init(configure:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#responsivetextfield.configuration.empty">empty</a></li><li class="variable"><a href="#responsivetextfield.configuration.partofchain">part​OfChain</a></li><li class="variable"><a href="#responsivetextfield.configuration.lastofchain">last​OfChain</a></li><li class="variable"><a href="#responsivetextfield.configuration.autoclears">autoclears</a></li><li class="variable"><a href="#responsivetextfield.configuration.email">email</a></li><li class="variable"><a href="#responsivetextfield.configuration.password">password</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#responsivetextfield.configuration.combine(_:)">combine(_:​)</a></li><li class="function"><a href="#responsivetextfield.configuration.combine(_:)">combine(_:​)</a></li></ul></li></ol>
+        </div>
+    </nav>
+
+    <main>
+        <article>
+            <h1>
+    <small>Structure</small>
+    <code class="name">Responsive​Text​Field.​Configuration</code>
+</h1>
+
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">Configuration</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Provides a way of configuring the underlying UITextField inside a ResponsiveTextField.</p>
+
+</div>
+<div class="discussion">
+    <p>All ResponsiveTextFields take a configuration which lets you package up common configurations
+that you use in your app. Configurations are composable and can be combined to create more
+detailed configurations.</p>
+
+</div>
+<section id="relationships">
+    <h2 hidden>Relationships</h2>
+        
+        <h3>Member Of</h3>
+<dl>
+    <dt class="structure"><code><a href="/swift-responsive-textfield/ResponsiveTextField">ResponsiveTextField</a></code></dt>
+<dd><p>A SwiftUI wrapper around UITextField that gives precise control over the responder state.</p>
+</dd>
+</dl>
+</section>
+    <section id="initializers">
+        <h2>Initializers</h2>
+
+        <div role="article" class="initializer" id="responsivetextfield.configuration.init(configure:)">
+    <h3>
+        <code>init(configure:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">configure</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">UITextField</span>) -&gt; <span class="type">Void</span>)</code></pre></body></html>
+</div>
+    </section>
+    <section id="properties">
+        <h2>Properties</h2>
+
+        <div role="article" class="variable" id="responsivetextfield.configuration.empty">
+    <h3>
+        <code>empty</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">empty</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="responsivetextfield.configuration.partofchain">
+    <h3>
+        <code>part​OfChain</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">partOfChain</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="responsivetextfield.configuration.lastofchain">
+    <h3>
+        <code>last​OfChain</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">lastOfChain</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="responsivetextfield.configuration.autoclears">
+    <h3>
+        <code>autoclears</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">autoclears</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="responsivetextfield.configuration.email">
+    <h3>
+        <code>email</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">email</span></code></pre></body></html>
+</div>
+<div role="article" class="variable" id="responsivetextfield.configuration.password">
+    <h3>
+        <code>password</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">password</span></code></pre></body></html>
+</div>
+    </section>
+    <section id="methods">
+        <h2>Methods</h2>
+
+        <div role="article" class="function" id="responsivetextfield.configuration.combine(_:)">
+    <h3>
+        <code>combine(_:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">func</span> <span class="function">combine</span>(<span class="keyword">_</span> <span class="variable">configurations</span>: <span class="keyword">Self</span>) -&gt; <span class="keyword">Self</span></code></pre></body></html>
+</div>
+<div role="article" class="function" id="responsivetextfield.configuration.combine(_:)">
+    <h3>
+        <code>combine(_:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">func</span> <span class="function">combine</span>(<span class="keyword">_</span> <span class="variable">configurations</span>: [<span class="keyword">Self</span>]) -&gt; <span class="keyword">Self</span></code></pre></body></html>
+</div>
+    </section>
+
+
+
+        </article>
+    </main>
+
+    <footer>
+        <p>
+    Generated on <time datetime="2021-03-15T00:45:39+0000">March 15, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+</p>
+    </footer>
+</body>
+</html>
