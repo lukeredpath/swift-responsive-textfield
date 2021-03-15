@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0
+
+### Changed
+
+* Remove RunLoop tick when updating first responder state
+* Replace `isEditing` binding with `firstResponderState` binding.
+
 ## 0.2.0
 
 ### Added

@@ -15,7 +15,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant(""),
-                firstResponderState: .constant(.resigned),
+                firstResponderState: .constant(.notFirstResponder),
                 isSecure: false,
                 configuration: .empty
             ).padding(),
@@ -28,7 +28,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
-                firstResponderState: .constant(.resigned),
+                firstResponderState: .constant(.notFirstResponder),
                 isSecure: false,
                 configuration: .empty
             ).padding(),
@@ -41,7 +41,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("ssh this is top secret"),
-                firstResponderState: .constant(.resigned),
+                firstResponderState: .constant(.notFirstResponder),
                 isSecure: true,
                 configuration: .empty
             ).padding(),
@@ -54,7 +54,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
-                firstResponderState: .constant(.resigned),
+                firstResponderState: .constant(.notFirstResponder),
                 isSecure: false,
                 configuration: .empty
             )
@@ -70,7 +70,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
-                firstResponderState: .constant(.resigned),
+                firstResponderState: .constant(.notFirstResponder),
                 isSecure: false,
                 configuration: .empty
             )
@@ -83,7 +83,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
-                firstResponderState: .constant(.resigned),
+                firstResponderState: .constant(.notFirstResponder),
                 isSecure: false,
                 configuration: .empty
             )

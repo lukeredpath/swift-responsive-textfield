@@ -17,10 +17,10 @@ struct ContentView: View {
     var password: String = ""
 
     @State
-    var emailResponderState: ResponsiveTextField.FirstResponderState = .become
+    var emailResponderState: ResponsiveTextField.FirstResponderState = .shouldBecomeFirstResponder
 
     @State
-    var passwordResponderState: ResponsiveTextField.FirstResponderState = .resigned
+    var passwordResponderState: ResponsiveTextField.FirstResponderState = .notFirstResponder
 
     @State
     var isEnabled: Bool = true
@@ -30,15 +30,23 @@ struct ContentView: View {
 
     var isEditingEmail: Binding<Bool> {
         Binding(
-            get: { emailResponderState == .current },
-            set: { emailResponderState = $0 ? .become : .resign }
+            get: { emailResponderState == .isFirstResponder },
+            set: {
+                emailResponderState = $0
+                    ? .shouldBecomeFirstResponder
+                    : .shouldResignFirstResponder
+            }
         )
     }
 
     var isEditingPassword: Binding<Bool> {
         Binding(
-            get: { passwordResponderState == .current },
-            set: { passwordResponderState = $0 ? .become : .resign }
+            get: { passwordResponderState == .isFirstResponder },
+            set: {
+                passwordResponderState = $0
+                    ? .shouldBecomeFirstResponder
+                    : .shouldResignFirstResponder
+            }
         )
     }
 
@@ -50,7 +58,7 @@ struct ContentView: View {
                     text: $email,
                     firstResponderState: $emailResponderState.animation(),
                     configuration: .email,
-                    handleReturn: { passwordResponderState = .become }
+                    handleReturn: { passwordResponderState = .shouldBecomeFirstResponder }
                 )
                 .responsiveKeyboardReturnType(.next)
                 .responsiveTextFieldTextColor(.blue)
@@ -65,10 +73,10 @@ struct ContentView: View {
                         firstResponderState: $passwordResponderState.animation(),
                         isSecure: hidePassword,
                         configuration: .combine(.password, .lastOfChain),
-                        handleReturn: { passwordResponderState = .resign },
+                        handleReturn: { passwordResponderState = .shouldResignFirstResponder },
                         handleDelete: {
                             if $0.isEmpty {
-                                emailResponderState = .become
+                                emailResponderState = .shouldBecomeFirstResponder
                             }
                         }
                     )

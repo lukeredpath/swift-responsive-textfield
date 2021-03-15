@@ -109,10 +109,10 @@ public struct ResponsiveTextField {
     }
 
     public enum FirstResponderState: Equatable {
-        case resigned
-        case become
-        case current
-        case resign
+        case notFirstResponder
+        case shouldBecomeFirstResponder
+        case isFirstResponder
+        case shouldResignFirstResponder
     }
 }
 
@@ -154,9 +154,9 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.font = font
 
         switch (uiView.isFirstResponder, firstResponderState.wrappedValue) {
-        case (true, .resign):
+        case (true, .shouldResignFirstResponder):
             uiView.resignFirstResponder()
-        case (false, .become):
+        case (false, .shouldBecomeFirstResponder):
             uiView.becomeFirstResponder()
         default:
             break
@@ -179,11 +179,11 @@ extension ResponsiveTextField: UIViewRepresentable {
         }
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
-            parent.skippingViewUpdates { self.firstResponderState = .current }
+            parent.skippingViewUpdates { self.firstResponderState = .isFirstResponder }
         }
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
-            parent.skippingViewUpdates { self.firstResponderState = .resigned }
+            parent.skippingViewUpdates { self.firstResponderState = .notFirstResponder }
         }
 
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -321,7 +321,7 @@ struct ResponsiveTextField_Previews: PreviewProvider {
         var text: String = ""
 
         @State
-        var firstResponderState: ResponsiveTextField.FirstResponderState = .resigned
+        var firstResponderState: ResponsiveTextField.FirstResponderState = .shouldBecomeFirstResponder
 
         var body: some View {
             ResponsiveTextField(
