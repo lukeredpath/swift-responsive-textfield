@@ -59,6 +59,20 @@ public struct ResponsiveTextField {
     /// If this is not set, the textfield delegate will indicate that the return key is not handled.
     var handleReturn: (() -> Void)?
 
+    /// A callback function that will be called when the user deletes backwards.
+    ///
+    /// Takes a single argument - a `String` - which will be the current text when the user
+    /// hits the delete key (but before any deletion occurs).
+    ///
+    /// If this is an empty string, it indicates that the user tapped delete inside an empty field.
+    var handleDelete: ((String) -> Void)?
+
+    /// A callback function that can be used to control whether or not text should change.
+    ///
+    /// Takes two `String` arguments - the text prior to the change and the new text if
+    /// the change is permitted.
+    ///
+    /// Return `true` to allow the change or `false` to prevent the change.
     var shouldChange: ((String, String) -> Bool)?
 
     public init(
@@ -68,6 +82,7 @@ public struct ResponsiveTextField {
         isSecure: Bool = false,
         configuration: Configuration = .empty,
         handleReturn: (() -> Void)? = nil,
+        handleDelete: ((String) -> Void)? = nil,
         shouldChange: ((String, String) -> Bool)? = nil
     ) {
         self.placeholder = placeholder
@@ -76,6 +91,7 @@ public struct ResponsiveTextField {
         self.isSecure = isSecure
         self.configuration = configuration
         self.handleReturn = handleReturn
+        self.handleDelete = handleDelete
         self.shouldChange = shouldChange
     }
 }
@@ -84,9 +100,10 @@ public struct ResponsiveTextField {
 
 extension ResponsiveTextField: UIViewRepresentable {
     public func makeUIView(context: Context) -> UITextField {
-        let textField = UITextField()
+        let textField = DeleteHandlingTextField()
         configuration.configure(textField)
         // This stops the text field from expanding if the text overflows the frame width
+        textField.handleDelete = handleDelete
         textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         textField.placeholder = placeholder
         textField.text = text.wrappedValue
@@ -178,6 +195,15 @@ extension ResponsiveTextField: UIViewRepresentable {
         @objc func textFieldTextChanged(_ textField: UITextField) {
             self.text = textField.text ?? ""
         }
+    }
+}
+
+private class DeleteHandlingTextField: UITextField {
+    var handleDelete: ((String) -> Void)?
+
+    override func deleteBackward() {
+        handleDelete?(text ?? "")
+        super.deleteBackward()
     }
 }
 

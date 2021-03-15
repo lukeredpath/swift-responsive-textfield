@@ -51,7 +51,8 @@ struct ContentView: View {
                         isEditing: $isEditingPassword.animation(),
                         isSecure: hidePassword,
                         configuration: .combine(.password, .lastOfChain),
-                        handleReturn: { isEditingPassword = false }
+                        handleReturn: { isEditingPassword = false },
+                        handleDelete: { isEditingEmail = $0.isEmpty }
                     )
                     .fixedSize(horizontal: false, vertical: true)
                     .disabled(!isEnabled)
