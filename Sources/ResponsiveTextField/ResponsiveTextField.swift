@@ -157,12 +157,16 @@ extension ResponsiveTextField: UIViewRepresentable {
         }
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
+            guard !isEditing else { return }
+
             // Scheduled on the next runloop to avoid runtime warnings
             // about changing state during a view update.
             RunLoop.main.schedule { self.isEditing = true }
         }
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
+            guard isEditing else { return }
+
             // Scheduled on the next runloop to avoid runtime warnings
             // about changing state during a view update.
             RunLoop.main.schedule { self.isEditing = false }
