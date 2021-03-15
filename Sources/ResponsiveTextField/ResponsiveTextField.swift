@@ -75,6 +75,8 @@ public struct ResponsiveTextField {
     /// Return `true` to allow the change or `false` to prevent the change.
     var shouldChange: ((String, String) -> Bool)?
 
+    fileprivate var shouldUpdateView: Bool = true
+
     public init(
         placeholder: String,
         text: Binding<String>,
@@ -93,6 +95,12 @@ public struct ResponsiveTextField {
         self.handleReturn = handleReturn
         self.handleDelete = handleDelete
         self.shouldChange = shouldChange
+    }
+
+    mutating func skippingViewUpdates(_ callback: () -> Void) {
+        shouldUpdateView = false
+        callback()
+        shouldUpdateView = true
     }
 }
 
@@ -126,6 +134,8 @@ extension ResponsiveTextField: UIViewRepresentable {
     }
 
     public func updateUIView(_ uiView: UITextField, context: Context) {
+        guard shouldUpdateView else { return }
+
         uiView.isEnabled = isEnabled
         uiView.isSecureTextEntry = isSecure
         uiView.returnKeyType = returnKeyType
@@ -142,7 +152,7 @@ extension ResponsiveTextField: UIViewRepresentable {
     }
 
     public class Coordinator: NSObject, UITextFieldDelegate {
-        let parent: ResponsiveTextField
+        var parent: ResponsiveTextField
 
         @Binding
         var text: String
@@ -158,18 +168,12 @@ extension ResponsiveTextField: UIViewRepresentable {
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
             guard !isEditing else { return }
-
-            // Scheduled on the next runloop to avoid runtime warnings
-            // about changing state during a view update.
-            RunLoop.main.schedule { self.isEditing = true }
+            parent.skippingViewUpdates { self.isEditing = true }
         }
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
             guard isEditing else { return }
-
-            // Scheduled on the next runloop to avoid runtime warnings
-            // about changing state during a view update.
-            RunLoop.main.schedule { self.isEditing = false }
+            parent.skippingViewUpdates { self.isEditing = false }
         }
 
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
