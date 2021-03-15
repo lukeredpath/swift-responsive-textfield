@@ -38,6 +38,8 @@ project using Xcode's built-in package management tools.
 
 ## Usage
 
+[API Documentation](https://lukeredpath.github.io/swift-responsive-textfield/)
+
 ### Getting Started
 
 To use `ResponsiveTextField` you will need to provide it with, at a minimum,
