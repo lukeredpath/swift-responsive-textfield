@@ -20,13 +20,13 @@ struct ContentView: View {
     var emailResponderDemand: FirstResponderDemand? = .shouldBecomeFirstResponder
 
     @State
-    var emailResponderState: FirstResponderState = .notFirstResponder
+    var isEmailFirstResponder: Bool = false
 
     @State
     var passwordResponderDemand: FirstResponderDemand?
 
     @State
-    var passwordResponderState: FirstResponderState = .notFirstResponder
+    var isPasswordFirstResponder: Bool = false
 
     @State
     var isEnabled: Bool = true
@@ -36,7 +36,7 @@ struct ContentView: View {
 
     var isEditingEmail: Binding<Bool> {
         Binding(
-            get: { emailResponderState == .isFirstResponder },
+            get: { isEmailFirstResponder },
             set: {
                 emailResponderDemand = $0
                     ? .shouldBecomeFirstResponder
@@ -47,7 +47,7 @@ struct ContentView: View {
 
     var isEditingPassword: Binding<Bool> {
         Binding(
-            get: { passwordResponderState == .isFirstResponder },
+            get: { isPasswordFirstResponder },
             set: {
                 passwordResponderDemand = $0
                     ? .shouldBecomeFirstResponder
@@ -64,9 +64,9 @@ struct ContentView: View {
                     text: $email,
                     firstResponderDemand: $emailResponderDemand.animation(),
                     configuration: .email,
-                    onFirstResponderStateChanged: { responderState in
+                    onFirstResponderStateChanged: { isFirstResponder in
                         withAnimation {
-                            emailResponderState = responderState
+                            isEmailFirstResponder = isFirstResponder
                         }
                     },
                     handleReturn: { passwordResponderDemand = .shouldBecomeFirstResponder },
@@ -90,9 +90,9 @@ struct ContentView: View {
                         isSecure: hidePassword,
                         firstResponderDemand: $passwordResponderDemand.animation(),
                         configuration: .combine(.password, .lastOfChain),
-                        onFirstResponderStateChanged: { responderState in
+                        onFirstResponderStateChanged: { isFirstResponder in
                             withAnimation {
-                                passwordResponderState = responderState
+                                isPasswordFirstResponder = isFirstResponder
                             }
                         },
                         handleReturn: { passwordResponderDemand = .shouldResignFirstResponder },

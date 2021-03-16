@@ -10,7 +10,8 @@ import SwiftUI
 /// A SwiftUI wrapper around UITextField that gives precise control over the responder state.
 ///
 public struct ResponsiveTextField {
-    public typealias FirstResponderStateChangeHandler = (FirstResponderState) -> Void
+    /// Communicates the text field's first responder state using a boolean value (is first responder).
+    public typealias FirstResponderStateChangeHandler = (Bool) -> Void
 
     /// The text field placeholder string
     let placeholder: String
@@ -144,19 +145,6 @@ public struct ResponsiveTextField {
 
 // MARK: - Managing the first responder state
 
-/// Encapsulates the current state of the text field in the responder chain.
-///
-/// When the text field starts or ends editing it's state will automatically change to `isFirstResponder`
-/// or `notFirstResponder` respectively.
-///
-public enum FirstResponderState: Equatable {
-    /// The text field is not currently the first responder (i.e not being edited)
-    case notFirstResponder
-
-    /// The text field is the current first responder and is being edited.
-    case isFirstResponder
-}
-
 /// Represents a request to change the text field's first responder state.
 ///
 public enum FirstResponderDemand: Equatable {
@@ -237,12 +225,12 @@ extension ResponsiveTextField: UIViewRepresentable {
         }
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
-            parent.onFirstResponderStateChanged?(.isFirstResponder)
+            parent.onFirstResponderStateChanged?(true)
             parent.firstResponderDemandFulfilled()
         }
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
-            parent.onFirstResponderStateChanged?(.notFirstResponder)
+            parent.onFirstResponderStateChanged?(false)
             parent.firstResponderDemandFulfilled()
         }
 
