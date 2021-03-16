@@ -1,4 +1,4 @@
-# ResponsiveTextField
+# ResponsiveTextField - a better SwiftUI text field
 
 [![CI](https://github.com/lukeredpath/swift-responsive-textfield/actions/workflows/ci.yml/badge.svg)](https://github.com/lukeredpath/swift-responsive-textfield/actions/workflows/ci.yml)
 [![GitHub license](https://img.shields.io/github/license/lukeredpath/swift-responsive-textfield.svg)](https://github.com/lukeredpath/swift-responsive-textfield/blob/master/LICENSE)
