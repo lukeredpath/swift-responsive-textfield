@@ -271,6 +271,7 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.isSecureTextEntry = isSecure
         uiView.returnKeyType = returnKeyType
         uiView.font = font
+        uiView.text = text.wrappedValue
 
         switch (uiView.isFirstResponder, firstResponderDemand?.wrappedValue) {
         case (true, .shouldResignFirstResponder):

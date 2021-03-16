@@ -124,6 +124,10 @@ struct ContentView: View {
                 Toggle("Enabled?", isOn: $isEnabled)
                     .padding(.bottom)
 
+                Button("Random password") {
+                    password = UUID().uuidString
+                }
+
                 Text("You typed the following email:")
                     .padding(.bottom)
 
