@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1
+
+### Fixed
+
+* Text field text would not update to reflect external state changes.
+
 ## 0.4.0
 
 ### Changed
