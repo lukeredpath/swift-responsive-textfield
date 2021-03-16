@@ -33,7 +33,6 @@ public struct ResponsiveTextField {
     ///
     /// To detect when the text field actually becomes or resigns first responder, use the
     /// `.onFirstResponderChange()` callback function.
-    ///
     var firstResponderDemand: Binding<FirstResponderDemand?>?
 
     /// Allows for the text field to be configured during creation.
@@ -84,6 +83,30 @@ public struct ResponsiveTextField {
     /// Return `true` to allow the change or `false` to prevent the change.
     var shouldChange: ((String, String) -> Bool)?
 
+    /// A list of supported standard editing actions.
+    ///
+    /// When set, this will override the default standard edit actions for a `UITextField`. Leave
+    /// set to `nil` if you only want to support the default actions.
+    ///
+    /// You can use this property and `standardEditActionHandler` to support both the
+    /// range of standard editing actions and how each editing action should be handled.
+    ///
+    /// If you exclude an edit action from this list, any corresponding action handler set in
+    /// any provided `standardEditActionHandler` will not be called.
+    var supportedStandardEditActions: Set<StandardEditAction>?
+
+    /// Can be set to provide custom standard editing action behaviour.
+    ///
+    /// When `nil`, all standard editing actions will result in the default `UITextField` behaviour.
+    ///
+    /// When set, any overridden actions will be called and if the action handler returns `true`, the
+    /// default `UITextField` behaviour will also be called. If the action handler returns `false`,
+    /// the default behaviour will not be called.
+    ///
+    /// If the provided type does not implement a particular editing action, the default `UITextField`
+    /// behaviour will be called.
+    var standardEditActionHandler: StandardEditActionHandling<UITextField>?
+
     fileprivate var shouldUpdateView: Bool = true
 
     public init(
@@ -95,7 +118,9 @@ public struct ResponsiveTextField {
         onFirstResponderStateChanged: FirstResponderStateChangeHandler? = nil,
         handleReturn: (() -> Void)? = nil,
         handleDelete: ((String) -> Void)? = nil,
-        shouldChange: ((String, String) -> Bool)? = nil
+        shouldChange: ((String, String) -> Bool)? = nil,
+        supportedStandardEditActions: Set<StandardEditAction>? = nil,
+        standardEditActionHandler: StandardEditActionHandling<UITextField>? = nil
     ) {
         self.placeholder = placeholder
         self.text = text
@@ -106,12 +131,8 @@ public struct ResponsiveTextField {
         self.handleReturn = handleReturn
         self.handleDelete = handleDelete
         self.shouldChange = shouldChange
-    }
-
-    fileprivate mutating func skippingViewUpdates(_ callback: () -> Void) {
-        shouldUpdateView = false
-        callback()
-        shouldUpdateView = true
+        self.supportedStandardEditActions = supportedStandardEditActions
+        self.standardEditActionHandler = standardEditActionHandler
     }
 
     fileprivate mutating func firstResponderDemandFulfilled() {
@@ -153,10 +174,12 @@ public enum FirstResponderDemand: Equatable {
 
 extension ResponsiveTextField: UIViewRepresentable {
     public func makeUIView(context: Context) -> UITextField {
-        let textField = DeleteHandlingTextField()
+        let textField = _UnderlyingTextField()
         configuration.configure(textField)
         // This stops the text field from expanding if the text overflows the frame width
         textField.handleDelete = handleDelete
+        textField.supportedStandardEditActions = supportedStandardEditActions
+        textField.standardEditActionHandler = standardEditActionHandler
         textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         textField.placeholder = placeholder
         textField.text = text.wrappedValue
@@ -256,8 +279,10 @@ extension ResponsiveTextField: UIViewRepresentable {
     }
 }
 
-private class DeleteHandlingTextField: UITextField {
+class _UnderlyingTextField: UITextField {
     var handleDelete: ((String) -> Void)?
+    var supportedStandardEditActions: Set<StandardEditAction>?
+    var standardEditActionHandler: StandardEditActionHandling<UITextField>?
 
     override func deleteBackward() {
         handleDelete?(text ?? "")

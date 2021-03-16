@@ -69,7 +69,13 @@ struct ContentView: View {
                             emailResponderState = responderState
                         }
                     },
-                    handleReturn: { passwordResponderDemand = .shouldBecomeFirstResponder }
+                    handleReturn: { passwordResponderDemand = .shouldBecomeFirstResponder },
+                    supportedStandardEditActions: [],
+                    standardEditActionHandler: .init(
+                        paste: { _, _ in
+                            return false
+                        }
+                    )
                 )
                 .responsiveKeyboardReturnType(.next)
                 .responsiveTextFieldTextColor(.blue)

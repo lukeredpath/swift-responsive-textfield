@@ -10,19 +10,22 @@ native TextField even in iOS 14.
 
 ## Features
 
-At a high level, it provides:
+At a high level, it provides the ability to:
 
-* A simple API, making use of SwiftUI bindings to capture entered text and
-  control the text field's first responder status.
-* The ability to set the text field's placeholder.
-* Support for secure text entry.
-* The ability to handle return key and delete key taps.
-* The ability to style the text field using SwiftUI-style view modifiers.
+* Use of SwiftUI bindings to capture entered text and control the text field's
+  first responder status.
+* Observe and react to the text field's first responder status.
+* Set the text field's placeholder.
+* Enable secure text entry.
+* Easily handle return key and delete key taps with a simple callback.
+* Style the text field using SwiftUI-style view modifiers.
 * Support for enabling and disabling the text field using the SwiftUI
-  Environment.
-* A composable configuration system for detailed configuration of the underlying
-  UITextField.
-* Control over how and when text editing should be permitted.
+  `.disabled` view modifier.
+* Configure the properties of the underlying text field using a composable
+  text field configuration system.
+* Control over how and when text changes should be permitted.
+* Customise which standard edit actions are available (e.g. copy, paste).
+* Override and customise the handling of standard edit actions.
 
 The following features are not currently supported:
 
