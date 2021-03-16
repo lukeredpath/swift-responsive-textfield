@@ -24,13 +24,12 @@ At a high level, it provides the ability to:
 * Configure the properties of the underlying text field using a composable
   text field configuration system.
 * Control over how and when text changes should be permitted.
+* Control over if the text field should begin or end editing.
 * Customise which standard edit actions are available (e.g. copy, paste).
 * Override and customise the handling of standard edit actions.
 
 The following features are not currently supported:
 
-* Control over if the text field should begin or end editing using the
-  UITextFieldDelegate methods.
 * Control over how text should be cleared.
 * Managing the text selection.
 * Any of the built-in attributed string supporting APIs.
