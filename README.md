@@ -237,10 +237,29 @@ major pieces of missing behaviour from the native `TextField` type.
 ### Observing the first responder state
 
 When initialised you can pass in a callback function using the parameter
-`onFirstResponderStateChanged:` - this takes a closure that will be called
-with the updated `FirstResponderState` whenever it changes, either as a result
+`onFirstResponderStateChanged:` - this takes a value of type
+`FirstResponderStateChangeHandler`, which wraps a closure that will be called
+with the updated first responder state whenever it changes, either as a result
 of some user interaction or as the result of a change in the
 `FirstResponderDemand` (see below).
+
+The first responder state is represented as  a single `Bool` value where `true`
+indicates that the text field has become  first responder and `false` indicates
+that it has resigned first responder.
+
+```swift
+struct ExampleView: View {
+  var body: some View {
+    ResponsiveTextField(
+        placeholder: "Email address",
+        text: $email,
+        configuration: .emailField,
+        onFirstResponderStateChanged: .init { isFirstResponder in
+          // do something with first responder state
+        }
+    )
+  }
+}
 
 If you need to track this state you can store it in some external state, such as
 an `@State` property or an `@ObservableObject` (like your view model):
@@ -248,18 +267,47 @@ an `@State` property or an `@ObservableObject` (like your view model):
 ```swift
 struct ExampleView: View {
   @State
-  var responderState: FirstResponderState = .notFirstResponder
+  var isFirstResponder = false
 
   var body: some View {
     ResponsiveTextField(
         placeholder: "Email address",
         text: $email,
         configuration: .emailField,
-        onFirstResponderStateChanged: { responderState = $0 }
+        onFirstResponderStateChanged: .init {
+          isFirstResponder = $0
+        }
     )
   }
 }
 ```
+
+If all you need to do is update some external state, you can use the built-in
+`.updates` state changed handler, passing in a binding to that state. The above
+example can be simplified to:
+
+```swift
+struct ExampleView: View {
+  @State
+  var isFirstResponder = false
+
+  var body: some View {
+    ResponsiveTextField(
+        placeholder: "Email address",
+        text: $email,
+        configuration: .emailField,
+        onFirstResponderStateChanged: .updates($isFirstResponder)
+    )
+  }
+}
+```
+
+`FirstResponderStateChangeHandler` can also be initialised with a
+`canBecomeFirstResponder` and `canResignFirstResponder` closures that both
+return a `Bool` - if provided, these will be called in the text field's
+`shouldBeginEditing` and `shouldEndEditing` delegate calls and provide flexible
+control over if the text field's responder state should change. If these
+closures are not provided these delegate methods will return `true`.
 
 ### Progamatically controlling the first responder state
 
@@ -383,6 +431,12 @@ struct ExampleView: View {
   }
 }
 ```
+
+When using programatic responder state demands and the `canBecomeFirstResponder`
+and `canResignFirstResponder` closures on `FirstResponderStateChangeHandler`,
+its important to note that the latter will take priority. If either of these
+closures return `false`, the demand will be ignored and marked as fulfilled,
+resetting it back to `nil`.
 
 ## Licence
 
