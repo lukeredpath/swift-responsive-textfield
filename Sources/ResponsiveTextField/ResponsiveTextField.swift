@@ -10,29 +10,31 @@ import SwiftUI
 /// A SwiftUI wrapper around UITextField that gives precise control over the responder state.
 ///
 public struct ResponsiveTextField {
+    public typealias FirstResponderStateChangeHandler = (FirstResponderState) -> Void
+
     /// The text field placeholder string
     let placeholder: String
 
     /// A binding to the text state that will hold the typed text
     let text: Binding<String>
 
-    /// A binding to control the first responder state of the text field.
-    ///
-    /// If the text field becomes or resigns first responder as a result of a user interaction,
-    /// this will be updated to `.current` or `.resigned` when the text field indicates
-    /// that it has started or finished editing.
-    ///
-    /// You can programatically set this to a value of `.become` to become first responder
-    /// or `.resign` to resign first responder. Programatically setting it to any other value
-    /// will not have any effect on the first responder state (it can only become `.current`
-    /// or `.resigned` when the system indicates that its responder state has changed).
-    let firstResponderState: Binding<FirstResponderState>
-
     /// Enables secure text entry.
     ///
     /// This field can be updated, allowing you to toggle secure entry on and off using
     /// some external state.
     let isSecure: Bool
+
+    /// Can be used to programatically control the text field's first responder state.
+    ///
+    /// When the binding's wrapped value is set, it will cause the text field to try and become or resign first responder status
+    /// either on first initialisation or on subsequent view updates.
+    ///
+    /// A wrapped value of `nil` indicates there is no demand (or any previous demand has been fulfilled).
+    ///
+    /// To detect when the text field actually becomes or resigns first responder, use the
+    /// `.onFirstResponderChange()` callback function.
+    ///
+    var firstResponderDemand: Binding<FirstResponderDemand?>?
 
     /// Allows for the text field to be configured during creation.
     let configuration: Configuration
@@ -59,6 +61,9 @@ public struct ResponsiveTextField {
     @Environment(\.textFieldTextAlignment)
     var textAlignment: NSTextAlignment
 
+    /// A calllback function that will be called whenever the first responder state changes.
+    var onFirstResponderStateChanged: FirstResponderStateChangeHandler?
+
     /// A callback function that will be called when the user taps the keyboard return button.
     /// If this is not set, the textfield delegate will indicate that the return key is not handled.
     var handleReturn: (() -> Void)?
@@ -84,39 +89,67 @@ public struct ResponsiveTextField {
     public init(
         placeholder: String,
         text: Binding<String>,
-        //isEditing: Binding<Bool>,
-        firstResponderState: Binding<FirstResponderState>,
         isSecure: Bool = false,
+        firstResponderDemand: Binding<FirstResponderDemand?>? = nil,
         configuration: Configuration = .empty,
+        onFirstResponderStateChanged: FirstResponderStateChangeHandler? = nil,
         handleReturn: (() -> Void)? = nil,
         handleDelete: ((String) -> Void)? = nil,
         shouldChange: ((String, String) -> Bool)? = nil
     ) {
         self.placeholder = placeholder
         self.text = text
-        self.firstResponderState = firstResponderState
+        self.firstResponderDemand = firstResponderDemand
         self.isSecure = isSecure
         self.configuration = configuration
+        self.onFirstResponderStateChanged = onFirstResponderStateChanged
         self.handleReturn = handleReturn
         self.handleDelete = handleDelete
         self.shouldChange = shouldChange
     }
 
-    mutating func skippingViewUpdates(_ callback: () -> Void) {
+    fileprivate mutating func skippingViewUpdates(_ callback: () -> Void) {
         shouldUpdateView = false
         callback()
         shouldUpdateView = true
     }
 
-    public enum FirstResponderState: Equatable {
-        case notFirstResponder
-        case shouldBecomeFirstResponder
-        case isFirstResponder
-        case shouldResignFirstResponder
+    fileprivate mutating func firstResponderDemandFulfilled() {
+        shouldUpdateView = false
+        firstResponderDemand?.wrappedValue = nil
+        shouldUpdateView = false
     }
 }
 
-// MARK: - UIViewRepresentable
+// MARK: - Managing the first responder state
+
+/// Encapsulates the current state of the text field in the responder chain.
+///
+/// When the text field starts or ends editing it's state will automatically change to `isFirstResponder`
+/// or `notFirstResponder` respectively.
+///
+/// The text field's responder state is communicated to its ancestors using the `.firstResponderState`
+/// preference key.
+///
+public enum FirstResponderState: Equatable {
+    /// The text field is not currently the first responder (i.e not being edited)
+    case notFirstResponder
+
+    /// The text field is the current first responder and is being edited.
+    case isFirstResponder
+}
+
+/// Represents a request to change the text field's first responder state.
+///
+public enum FirstResponderDemand: Equatable {
+    /// The text field should become first responder on the next view update.
+    case shouldBecomeFirstResponder
+
+    /// The text field should resign first responder on the next view update.
+    case shouldResignFirstResponder
+}
+
+// MARK: - UIViewRepresentable implementation
 
 extension ResponsiveTextField: UIViewRepresentable {
     public func makeUIView(context: Context) -> UITextField {
@@ -145,6 +178,11 @@ extension ResponsiveTextField: UIViewRepresentable {
         Coordinator(textField: self)
     }
 
+    /// Will update the text view when the containing view triggers a body re-calculation.
+    ///
+    /// If the first responder state has changed, this may trigger the textfield to become or resign
+    /// first responder status.
+    ///
     public func updateUIView(_ uiView: UITextField, context: Context) {
         guard shouldUpdateView else { return }
 
@@ -153,13 +191,13 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.returnKeyType = returnKeyType
         uiView.font = font
 
-        switch (uiView.isFirstResponder, firstResponderState.wrappedValue) {
+        switch (uiView.isFirstResponder, firstResponderDemand?.wrappedValue) {
         case (true, .shouldResignFirstResponder):
             uiView.resignFirstResponder()
         case (false, .shouldBecomeFirstResponder):
             uiView.becomeFirstResponder()
         default:
-            break
+            context.coordinator.resetFirstResponderDemand()
         }
     }
 
@@ -169,21 +207,23 @@ extension ResponsiveTextField: UIViewRepresentable {
         @Binding
         var text: String
 
-        @Binding
-        var firstResponderState: FirstResponderState
-
         init(textField: ResponsiveTextField) {
             self.parent = textField
             self._text = textField.text
-            self._firstResponderState = textField.firstResponderState
+        }
+
+        public func resetFirstResponderDemand() {
+            parent.firstResponderDemandFulfilled()
         }
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
-            parent.skippingViewUpdates { self.firstResponderState = .isFirstResponder }
+            parent.onFirstResponderStateChanged?(.isFirstResponder)
+            parent.firstResponderDemandFulfilled()
         }
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
-            parent.skippingViewUpdates { self.firstResponderState = .notFirstResponder }
+            parent.onFirstResponderStateChanged?(.notFirstResponder)
+            parent.firstResponderDemandFulfilled()
         }
 
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -321,13 +361,13 @@ struct ResponsiveTextField_Previews: PreviewProvider {
         var text: String = ""
 
         @State
-        var firstResponderState: ResponsiveTextField.FirstResponderState = .shouldBecomeFirstResponder
+        var firstResponderDemand: FirstResponderDemand? = .shouldBecomeFirstResponder
 
         var body: some View {
             ResponsiveTextField(
                 placeholder: "Placeholder",
                 text: $text,
-                firstResponderState: $firstResponderState,
+                firstResponderDemand: $firstResponderDemand,
                 configuration: configuration,
                 shouldChange: { $1.count <= 10 }
             )

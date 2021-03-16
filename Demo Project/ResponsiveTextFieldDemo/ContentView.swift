@@ -17,10 +17,16 @@ struct ContentView: View {
     var password: String = ""
 
     @State
-    var emailResponderState: ResponsiveTextField.FirstResponderState = .shouldBecomeFirstResponder
+    var emailResponderDemand: FirstResponderDemand? = .shouldBecomeFirstResponder
 
     @State
-    var passwordResponderState: ResponsiveTextField.FirstResponderState = .notFirstResponder
+    var emailResponderState: FirstResponderState = .notFirstResponder
+
+    @State
+    var passwordResponderDemand: FirstResponderDemand?
+
+    @State
+    var passwordResponderState: FirstResponderState = .notFirstResponder
 
     @State
     var isEnabled: Bool = true
@@ -32,7 +38,7 @@ struct ContentView: View {
         Binding(
             get: { emailResponderState == .isFirstResponder },
             set: {
-                emailResponderState = $0
+                emailResponderDemand = $0
                     ? .shouldBecomeFirstResponder
                     : .shouldResignFirstResponder
             }
@@ -43,7 +49,7 @@ struct ContentView: View {
         Binding(
             get: { passwordResponderState == .isFirstResponder },
             set: {
-                passwordResponderState = $0
+                passwordResponderDemand = $0
                     ? .shouldBecomeFirstResponder
                     : .shouldResignFirstResponder
             }
@@ -56,9 +62,14 @@ struct ContentView: View {
                 ResponsiveTextField(
                     placeholder: "Email address",
                     text: $email,
-                    firstResponderState: $emailResponderState.animation(),
+                    firstResponderDemand: $emailResponderDemand.animation(),
                     configuration: .email,
-                    handleReturn: { passwordResponderState = .shouldBecomeFirstResponder }
+                    onFirstResponderStateChanged: { responderState in
+                        withAnimation {
+                            emailResponderState = responderState
+                        }
+                    },
+                    handleReturn: { passwordResponderDemand = .shouldBecomeFirstResponder }
                 )
                 .responsiveKeyboardReturnType(.next)
                 .responsiveTextFieldTextColor(.blue)
@@ -70,13 +81,18 @@ struct ContentView: View {
                     ResponsiveTextField(
                         placeholder: "Password",
                         text: $password,
-                        firstResponderState: $passwordResponderState.animation(),
                         isSecure: hidePassword,
+                        firstResponderDemand: $passwordResponderDemand.animation(),
                         configuration: .combine(.password, .lastOfChain),
-                        handleReturn: { passwordResponderState = .shouldResignFirstResponder },
+                        onFirstResponderStateChanged: { responderState in
+                            withAnimation {
+                                passwordResponderState = responderState
+                            }
+                        },
+                        handleReturn: { passwordResponderDemand = .shouldResignFirstResponder },
                         handleDelete: {
                             if $0.isEmpty {
-                                emailResponderState = .shouldBecomeFirstResponder
+                                emailResponderDemand = .shouldBecomeFirstResponder
                             }
                         }
                     )

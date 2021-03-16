@@ -15,8 +15,8 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant(""),
-                firstResponderState: .constant(.notFirstResponder),
                 isSecure: false,
+                firstResponderDemand: nil,
                 configuration: .empty
             ).padding(),
             as: .fixedSizeTextFieldImage
@@ -28,8 +28,8 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
-                firstResponderState: .constant(.notFirstResponder),
                 isSecure: false,
+                firstResponderDemand: nil,
                 configuration: .empty
             ).padding(),
             as: .fixedSizeTextFieldImage
@@ -41,8 +41,8 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("ssh this is top secret"),
-                firstResponderState: .constant(.notFirstResponder),
                 isSecure: true,
+                firstResponderDemand: nil,
                 configuration: .empty
             ).padding(),
             as: .fixedSizeTextFieldImage
@@ -54,8 +54,8 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
-                firstResponderState: .constant(.notFirstResponder),
                 isSecure: false,
+                firstResponderDemand: nil,
                 configuration: .empty
             )
             .responsiveTextFieldFont(.preferredFont(forTextStyle: .headline))
@@ -70,8 +70,8 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
-                firstResponderState: .constant(.notFirstResponder),
                 isSecure: false,
+                firstResponderDemand: nil,
                 configuration: .empty
             )
             .responsiveTextFieldTextAlignment(.center)
@@ -83,8 +83,8 @@ final class ResponsiveTextFieldTests: XCTestCase {
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
-                firstResponderState: .constant(.notFirstResponder),
                 isSecure: false,
+                firstResponderDemand: nil,
                 configuration: .empty
             )
             .responsiveTextFieldTextAlignment(.right)

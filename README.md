@@ -47,21 +47,18 @@ project using Xcode's built-in package management tools.
 ### Getting Started
 
 To use `ResponsiveTextField` you will need to provide it with, at a minimum,
-a placeholder string, a `Binding<String>` to capture the text entered into the
-text field and a `Binding<Bool>` to manage the text field's first responder
-status.
+a placeholder string and a `Binding<String>` to capture the text entered into
+the text field.
 
 ```swift
 struct ExampleView: View {
   @State var email: String = ""
-  @State var isEditingEmail: Bool = false
 
   var body: some View {
     VStack {
       ResponsiveTextField(
           placeholder: "Email address",
-          text: $email,
-          isEditing: $isEditingEmail
+          text: $email
       )
     }
   }
@@ -76,14 +73,27 @@ size using the `.fixedSize` modifier:
 ```swift
 ResponsiveTextField(
     placeholder: "Email address",
-    text: $email,
-    isEditing: $isEditingEmail
+    text: $email
 )
 .fixedSize(horizontal: false, vertical: true)
 ```
 
 As the user types in the field, it will update the state that the binding was
 derived from.
+
+You can enable secure text entry by passing in the `isSecure` property:
+
+```swift
+ResponsiveTextField(
+    placeholder: "Email address",
+    text: $email,
+    isSecure: true
+)
+```
+
+The `isSecure` property can be updated when the view is updated so it is
+possible to control this via some external state property, i.e. to dynamically
+enable or disable secure text entry.
 
 ### Disabling the text field
 
@@ -93,8 +103,7 @@ You can disable the text field using the standard SwiftUI `.disabled` modifier:
 
 ResponsiveTextField(
     placeholder: "Email address",
-    text: $email,
-    isEditing: $isEditingEmail
+    text: $email
 )
 .disabled(true)
 ```
@@ -146,7 +155,6 @@ Its important to note that this configuration will be called early during the
 ResponsiveTextField(
     placeholder: "Email address",
     text: $email,
-    isEditing: $isEditingEmail,
     configuration: .init {
       $0.autocorrectionType = .no
       $0.clearButtonModde = .whileEditing
@@ -179,7 +187,6 @@ You can now use this anywhere within your app in a concise way:
 ResponsiveTextField(
     placeholder: "Email address",
     text: $email,
-    isEditing: $isEditingEmail,
     configuration: .emailField
 )
 ```
@@ -224,25 +231,82 @@ public extension ResponsiveTextField.Configuration {
 control over the first responder status of the control. This is one of the
 major pieces of missing behaviour from the native `TextField` type.
 
-The control is passed a `Binding<Bool>` on initialisation which allows two-way
-communication about the text field's responder state. When the user taps on
-the text field, it will become first responder unless it has been disabled.
-This will update the state that the binding was derived from to `true`.
-Similarly, if another control becomes first responder, the text field will
-resign it's first responder status and set the underlying state to `false`.
+### Observing the first responder state
 
-Update the external state will update the text field and will make it become
-or resign first responder. For example, on a screen with two text fields, you
-could make the first text field become first responder automatically, causing
-the keyboard to appear when the view is shown, by simply setting the default
-value of the state to `true`:
+When initialised you can pass in a callback function using the parameter
+`onFirstResponderStateChanged:` - this takes a closure that will be called
+with the updated `FirstResponderState` whenever it changes, either as a result
+of some user interaction or as the result of a change in the
+`FirstResponderDemand` (see below).
+
+If you need to track this state you can store it in some external state, such as
+an `@State` property or an `@ObservableObject` (like your view model):
+
+```swift
+struct ExampleView: View {
+  @State
+  var responderState: FirstResponderState = .notFirstResponder
+
+  var body: some View {
+    ResponsiveTextField(
+        placeholder: "Email address",
+        text: $email,
+        configuration: .emailField,
+        onFirstResponderStateChanged: { responderState = $0 }
+    )
+  }
+}
+```
+
+### Progamatically controlling the first responder state
+
+`ResponsiveTextField` also supports binding-based control over the field's
+first responder state. To control the first responder state, you must
+initialise the field with a `Binding<FirstResponderDemand?>`:
+
+```swift
+struct ExampleView: View {
+  @State
+  var responderDemand: FirstResponderDemand?
+
+  var body: some View {
+    ResponsiveTextField(
+        placeholder: "Email address",
+        text: $email,
+        firstResponderDemand: $responderDemand
+    )
+  }
+}
+```
+
+Whenever the binding's wrapped value changes, it will attempt to trigger  a
+responder state change unless the text field's current responder state already
+fulfils the demand. Once the demand has been fulfilled the binding's wrapped
+value will be set back to `nil`.
+
+#### Becoming first responder
+
+To make the text field become first responder, set the demand to
+`.shouldBecomeFirstResponder`. If the text field is already first responder the
+binding's wrapped value will be automatically set back to `nil`, otherwise
+`becomeFirstResponder()` will be called and the binding's wrapped value will
+be set to `nil` once the first responder state has become `isFirstResponder`.
+
+#### Resigning first responder
+
+To make the text field resign first responder, set the demand to
+`.shouldResignFirstResponder`. If the text field is not the first responder the
+binding's wrapped value will be automatically set back to `nil`, otherwise
+`resignFirstResponder()` will be called and the binding's wrapped value will
+be set to `nil` once the first responder state has become `notFirstResponder`.
+
+### Example: Using `@State` to become first responder on view appear
 
 ```swift
 struct ExampleView: View {
   @State var email: String = ""
   @State var password: String = ""
-  @State var isEditingEmail: Bool = true
-  @State var isEditingPassword: Bool = false
+  @State var emailFirstResponderDemand: FirstResponderDemand? = .shouldBecomeFirstResponder
 
   var body: some View {
     VStack {
@@ -250,12 +314,7 @@ struct ExampleView: View {
       ResponsiveTextField(
           placeholder: "Email address",
           text: $email,
-          isEditing: $isEditingEmail
-      )
-      ResponsiveTextField(
-          placeholder: "Password",
-          text: $password,
-          isEditing: $isEditingPassword
+          firstResponderDemand: $emailFirstResponderDemand
       )
     }
   }
@@ -266,16 +325,25 @@ You could also trigger the field to become first responder after a short
 delay after appearing:
 
 ```swift
-VStack {
-  ResponsiveTextField(
-      placeholder: "Email address",
-      text: $email,
-      isEditing: $isEditingEmail
-  )
+struct ExampleView: View {
+  @State var email: String = ""
+  @State var password: String = ""
+  @State var emailFirstResponderDemand: FirstResponderDemand?
+
+  var body: some View {
+    VStack {
+      /// This field will become first responder automatically
+      ResponsiveTextField(
+          placeholder: "Email address",
+          text: $email,
+          firstResponderDemand: $emailFirstResponderDemand
+      )
+    }
+  }
 }
 .onAppear {
   DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-    isEditingEmail = true
+    emailFirstResponderDemand = .shouldBecomeFirstResponder
   }
 }
 ```
@@ -287,8 +355,8 @@ field to the next when the keyboard return button is tapped:
 struct ExampleView: View {
   @State var email: String = ""
   @State var password: String = ""
-  @State var isEditingEmail: Bool = true
-  @State var isEditingPassword: Bool = false
+  @State var emailFirstResponderDemand: FirstResponderDemand? = .shouldBecomeFirstResponder
+  @State var passwordFirstResponderDemand: FirstResponderDemand?
 
   var body: some View {
     VStack {
@@ -296,17 +364,17 @@ struct ExampleView: View {
       ResponsiveTextField(
           placeholder: "Email address",
           text: $email,
-          isEditing: $isEditingEmail,
+          firstResponderDemand: $emailFirstResponderDemand,
           configuration: .emailField,
-          handleReturn: { isEditingPassword = true }
+          handleReturn: { passwordFirstResponderDemand = .shouldBecomeFirstResponder }
       )
       /// Tapping return will resign first responder and hide the keyboard
       ResponsiveTextField(
           placeholder: "Password",
           text: $password,
-          isEditing: $isEditingPassword,
+          firstResponderDemand: $passwordFirstResponderDemand,
           configuration: .passwordField,
-          handleReturn: { isEditingPassword = false }
+          handleReturn: { passwordFirstResponderDemand = .shouldResignFirstResponder }
       )
     }
   }

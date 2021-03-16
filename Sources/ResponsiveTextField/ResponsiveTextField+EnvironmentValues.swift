@@ -9,42 +9,53 @@ import SwiftUI
 
 // MARK: - Environment Keys
 
-private struct KeyboardReturnTypeKey: EnvironmentKey {
-    static let defaultValue: UIReturnKeyType = .default
-}
+extension ResponsiveTextField {
+    fileprivate struct KeyboardReturnTypeKey: EnvironmentKey {
+        static let defaultValue: UIReturnKeyType = .default
+    }
 
-private struct ResponsiveTextFieldFontKey: EnvironmentKey {
-    static let defaultValue: UIFont = .preferredFont(forTextStyle: .body)
-}
+    fileprivate struct FontKey: EnvironmentKey {
+        static let defaultValue: UIFont = .preferredFont(forTextStyle: .body)
+    }
 
-private struct ResponsiveTextFieldTextColorKey: EnvironmentKey {
-    static let defaultValue: UIColor = .black
-}
+    fileprivate struct TextColorKey: EnvironmentKey {
+        static let defaultValue: UIColor = .black
+    }
 
-private struct ResponsiveTextFieldTextAlignmentKey: EnvironmentKey {
-    static let defaultValue: NSTextAlignment = .natural
+    fileprivate struct TextAlignmentKey: EnvironmentKey {
+        static let defaultValue: NSTextAlignment = .natural
+    }
+
+    fileprivate struct FirstResponderDemandKey: EnvironmentKey {
+        static let defaultValue: FirstResponderDemand? = nil
+    }
 }
 
 // MARK: - Environment Values
 
 extension EnvironmentValues {
     var keyboardReturnKeyType: UIReturnKeyType {
-        get { self[KeyboardReturnTypeKey.self] }
-        set { self[KeyboardReturnTypeKey.self] = newValue }
+        get { self[ResponsiveTextField.KeyboardReturnTypeKey.self] }
+        set { self[ResponsiveTextField.KeyboardReturnTypeKey.self] = newValue }
     }
 
     var textFieldFont: UIFont {
-        get { self[ResponsiveTextFieldFontKey.self] }
-        set { self[ResponsiveTextFieldFontKey.self] = newValue }
+        get { self[ResponsiveTextField.FontKey.self] }
+        set { self[ResponsiveTextField.FontKey.self] = newValue }
     }
 
     var textFieldTextColor: UIColor {
-        get { self[ResponsiveTextFieldTextColorKey.self] }
-        set { self[ResponsiveTextFieldTextColorKey.self] = newValue }
+        get { self[ResponsiveTextField.TextColorKey.self] }
+        set { self[ResponsiveTextField.TextColorKey.self] = newValue }
     }
 
     var textFieldTextAlignment: NSTextAlignment {
-        get { self[ResponsiveTextFieldTextAlignmentKey.self] }
-        set { self[ResponsiveTextFieldTextAlignmentKey.self] = newValue }
+        get { self[ResponsiveTextField.TextAlignmentKey.self] }
+        set { self[ResponsiveTextField.TextAlignmentKey.self] = newValue }
+    }
+
+    var firstResponderStateDemand: FirstResponderDemand? {
+        get { self[ResponsiveTextField.FirstResponderDemandKey.self] }
+        set { self[ResponsiveTextField.FirstResponderDemandKey.self] = newValue }
     }
 }
