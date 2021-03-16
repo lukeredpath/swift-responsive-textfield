@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.4.0
+
+### Changed
+
+* Replaced `FirstResponderStateChangeHandler` typealias with a real type that
+  wraps a change handler closure.
+* Replaced `FirstResponderState` with a single boolean value to represent the
+  first responder state.
+
+### Added
+
+* The ability to easily update external state when the first responder state
+  changes using `FirstResponderStateChangeHandler.updates($someBinding)`.
+* Easily animate first responder state changes using the `.animation()` modifier
+  on `FirstResponderStateChangeHandler`
+* `FirstResponderStateChangeHandler` can also be given closures for custom
+  control over whether or not the text field should become or resign first
+  responder, hooking into the `shouldBeginEditing` and `shouldEndEditing`
+  delegate methods.
+
 ## 0.3.0
 
 ### Added
