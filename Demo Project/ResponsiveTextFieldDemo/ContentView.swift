@@ -90,9 +90,9 @@ struct ContentView: View {
                         isSecure: hidePassword,
                         firstResponderDemand: $passwordResponderDemand.animation(),
                         configuration: .combine(.password, .lastOfChain),
-                        onFirstResponderStateChanged: FirstResponderStateChangeHandler { isFirstResponder in
-                            isPasswordFirstResponder = isFirstResponder
-                        }.animation(),
+                        onFirstResponderStateChanged: FirstResponderStateChangeHandler
+                            .updates($isPasswordFirstResponder)
+                            .animation(),
                         handleReturn: { passwordResponderDemand = .shouldResignFirstResponder },
                         handleDelete: {
                             if $0.isEmpty {

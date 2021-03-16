@@ -204,6 +204,20 @@ public struct FirstResponderStateChangeHandler {
     }
 }
 
+extension FirstResponderStateChangeHandler {
+    /// Returns a change handler that updates a `Bool` binding with the `isFirstResponder`
+    /// value whenever it changes.
+    ///
+    /// - Parameters:
+    ///     - binding: A binding to some Boolean state property that should be updated.
+    ///
+    public static func updates(_ binding: Binding<Bool>) -> Self {
+        .init { isFirstResponder in
+            binding.wrappedValue = isFirstResponder
+        }
+    }
+}
+
 /// Represents a request to change the text field's first responder state.
 ///
 public enum FirstResponderDemand: Equatable {
