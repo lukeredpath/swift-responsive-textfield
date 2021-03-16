@@ -149,9 +149,6 @@ public struct ResponsiveTextField {
 /// When the text field starts or ends editing it's state will automatically change to `isFirstResponder`
 /// or `notFirstResponder` respectively.
 ///
-/// The text field's responder state is communicated to its ancestors using the `.firstResponderState`
-/// preference key.
-///
 public enum FirstResponderState: Equatable {
     /// The text field is not currently the first responder (i.e not being edited)
     case notFirstResponder
