@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Member Of</a></li><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#responsivetextfield.coordinator.resetfirstresponderdemand()">reset​First​Responder​Demand()</a></li><li class="function"><a href="#responsivetextfield.coordinator.textfielddidbeginediting(_:)">text​Field​Did​Begin​Editing(_:​)</a></li><li class="function"><a href="#responsivetextfield.coordinator.textfielddidendediting(_:)">text​Field​Did​End​Editing(_:​)</a></li><li class="function"><a href="#responsivetextfield.coordinator.textfieldshouldreturn(_:)">text​Field​Should​Return(_:​)</a></li><li class="function"><a href="#responsivetextfield.coordinator.textfield(_:shouldchangecharactersin:replacementstring:)">text​Field(_:​should​Change​Characters​In:​replacement​String:​)</a></li></ul></li></ol>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Member Of</a></li><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#responsivetextfield.coordinator.resetfirstresponderdemand()">reset​First​Responder​Demand()</a></li><li class="function"><a href="#responsivetextfield.coordinator.textfieldshouldbeginediting(_:)">text​Field​Should​Begin​Editing(_:​)</a></li><li class="function"><a href="#responsivetextfield.coordinator.textfielddidbeginediting(_:)">text​Field​Did​Begin​Editing(_:​)</a></li><li class="function"><a href="#responsivetextfield.coordinator.textfieldshouldendediting(_:)">text​Field​Should​End​Editing(_:​)</a></li><li class="function"><a href="#responsivetextfield.coordinator.textfielddidendediting(_:)">text​Field​Did​End​Editing(_:​)</a></li><li class="function"><a href="#responsivetextfield.coordinator.textfieldshouldreturn(_:)">text​Field​Should​Return(_:​)</a></li><li class="function"><a href="#responsivetextfield.coordinator.textfield(_:shouldchangecharactersin:replacementstring:)">text​Field(_:​should​Change​Characters​In:​replacement​String:​)</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -68,7 +68,7 @@
 <text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">UITextFieldDelegate</text>
 </g>
 <!-- ResponsiveTextField.Coordinator&#45;&gt;UITextFieldDelegate -->
-<g id="edge1" class="edge conformsTo">
+<g id="edge2" class="edge conformsTo">
 <title>ResponsiveTextField.Coordinator&#45;&gt;UITextFieldDelegate</title>
 <path fill="none" stroke="#000000" d="M375.5134,-71.9243C344.4871,-61.9959 305.8297,-49.6255 273.3694,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="274.1008,-35.7975 263.5098,-36.0831 271.9673,-42.4645 274.1008,-35.7975"/>
@@ -80,7 +80,7 @@
 <text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">NSObject</text>
 </g>
 <!-- ResponsiveTextField.Coordinator&#45;&gt;NSObject -->
-<g id="edge2" class="edge conformsTo">
+<g id="edge1" class="edge conformsTo">
 <title>ResponsiveTextField.Coordinator&#45;&gt;NSObject</title>
 <path fill="none" stroke="#000000" d="M488.4866,-71.9243C519.5129,-61.9959 558.1703,-49.6255 590.6306,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="592.0327,-42.4645 600.4902,-36.0831 589.8992,-35.7975 592.0327,-42.4645"/>
@@ -112,11 +112,23 @@
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">resetFirstResponderDemand</span>()</code></pre></body></html>
 </div>
+<div role="article" class="function" id="responsivetextfield.coordinator.textfieldshouldbeginediting(_:)">
+    <h3>
+        <code>text​Field​Should​Begin​Editing(_:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">textFieldShouldBeginEditing</span>(<span class="keyword">_</span> <span class="variable">textField</span>: <span class="type">UITextField</span>) -&gt; <span class="type">Bool</span></code></pre></body></html>
+</div>
 <div role="article" class="function" id="responsivetextfield.coordinator.textfielddidbeginediting(_:)">
     <h3>
         <code>text​Field​Did​Begin​Editing(_:​)</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">textFieldDidBeginEditing</span>(<span class="keyword">_</span> <span class="variable">textField</span>: <span class="type">UITextField</span>)</code></pre></body></html>
+</div>
+<div role="article" class="function" id="responsivetextfield.coordinator.textfieldshouldendediting(_:)">
+    <h3>
+        <code>text​Field​Should​End​Editing(_:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">textFieldShouldEndEditing</span>(<span class="keyword">_</span> <span class="variable">textField</span>: <span class="type">UITextField</span>) -&gt; <span class="type">Bool</span></code></pre></body></html>
 </div>
 <div role="article" class="function" id="responsivetextfield.coordinator.textfielddidendediting(_:)">
     <h3>
@@ -145,7 +157,7 @@
 
     <footer>
         <p>
-    Generated on <time datetime="2021-03-16T02:28:13+0000">March 16, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-03-16T10:51:53+0000">March 16, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
