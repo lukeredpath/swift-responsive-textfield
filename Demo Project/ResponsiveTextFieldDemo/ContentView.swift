@@ -64,11 +64,11 @@ struct ContentView: View {
                     text: $email,
                     firstResponderDemand: $emailResponderDemand.animation(),
                     configuration: .email,
-                    onFirstResponderStateChanged: .init { isFirstResponder in
-                        withAnimation {
-                            isEmailFirstResponder = isFirstResponder
-                        }
-                    },
+                    onFirstResponderStateChanged: FirstResponderStateChangeHandler(
+                        handleStateChange: { isEmailFirstResponder = $0 },
+                        canBecomeFirstResponder: { true },
+                        canResignFirstResponder: { true }
+                    ).animation(),
                     handleReturn: { passwordResponderDemand = .shouldBecomeFirstResponder },
                     supportedStandardEditActions: [],
                     standardEditActionHandler: .init(
@@ -90,11 +90,9 @@ struct ContentView: View {
                         isSecure: hidePassword,
                         firstResponderDemand: $passwordResponderDemand.animation(),
                         configuration: .combine(.password, .lastOfChain),
-                        onFirstResponderStateChanged: .init { isFirstResponder in
-                            withAnimation {
-                                isPasswordFirstResponder = isFirstResponder
-                            }
-                        },
+                        onFirstResponderStateChanged: FirstResponderStateChangeHandler { isFirstResponder in
+                            isPasswordFirstResponder = isFirstResponder
+                        }.animation(),
                         handleReturn: { passwordResponderDemand = .shouldResignFirstResponder },
                         handleDelete: {
                             if $0.isEmpty {

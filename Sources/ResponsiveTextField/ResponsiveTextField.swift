@@ -150,12 +150,57 @@ public struct FirstResponderStateChangeHandler {
     ///
     public var handleStateChange: (Bool) -> Void
 
+    /// Allows fine-grained control over if the text field should become the first responder.
+    ///
+    /// This will be called when the text field's `shouldBeginEditing` delegate method is
+    /// called and provides a final opportunity to prevent the text field becoming first responder.
+    ///
+    /// If the responder change was triggered programatically by a `FirstResponderDemand`
+    /// and this returns `false` the demand will still be marked as fulfilled and reset to `nil`.
+    public var canBecomeFirstResponder: (() -> Bool)?
+
+    /// Allows fine-grained control over if the text field should become the first responder.
+    ///
+    /// This will be called when the text field's `shouldEndEditing` delegate method is
+    /// called and provides a final opportunity to prevent the text field from resigning first responder.
+    ///
+    /// If the responder change was triggered programatically by a `FirstResponderDemand`
+    /// and this returns `false` the demand will still be marked as fulfilled and reset to `nil`.
+    public var canResignFirstResponder: (() -> Bool)?
+
+    /// Initialises a state change handler with a `handleStateChange` callback.
+    ///
+    /// Most of the time this is the only callback that you will need to provide so this initialiser
+    /// can be called with trailing closure syntax.
     public init(handleStateChange: @escaping (Bool) -> Void) {
         self.handleStateChange = handleStateChange
     }
 
+    public init(
+        handleStateChange: @escaping (Bool) -> Void,
+        canBecomeFirstResponder: (() -> Bool)? = nil,
+        canResignFirstResponder: (() -> Bool)? = nil
+    ) {
+        self.handleStateChange = handleStateChange
+        self.canBecomeFirstResponder = canBecomeFirstResponder
+        self.canResignFirstResponder = canResignFirstResponder
+    }
+
     func callAsFunction(_ isFirstResponder: Bool) {
         handleStateChange(isFirstResponder)
+    }
+
+    /// Returns a new state change handler that wraps the underlying state change handler
+    /// in a `withAnimation` closure - this is useful if you want state changes triggered by
+    /// a first responder state change to be explicitly animated.
+    public func animation() -> Self {
+        .init(
+            handleStateChange: { isFirstResponder in
+                withAnimation { self.handleStateChange(isFirstResponder) }
+            },
+            canBecomeFirstResponder: canBecomeFirstResponder,
+            canResignFirstResponder: canResignFirstResponder
+        )
     }
 }
 
@@ -238,9 +283,31 @@ extension ResponsiveTextField: UIViewRepresentable {
             parent.firstResponderDemandFulfilled()
         }
 
+        public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+            if let canBecomeFirstResponder = parent.onFirstResponderStateChanged?.canBecomeFirstResponder {
+                let shouldBeginEditing = canBecomeFirstResponder()
+                if !shouldBeginEditing {
+                    parent.firstResponderDemandFulfilled()
+                }
+                return shouldBeginEditing
+            }
+            return true
+        }
+
         public func textFieldDidBeginEditing(_ textField: UITextField) {
             parent.onFirstResponderStateChanged?(true)
             parent.firstResponderDemandFulfilled()
+        }
+
+        public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+            if let canResignFirstResponder = parent.onFirstResponderStateChanged?.canResignFirstResponder {
+                let shouldEndEditing = canResignFirstResponder()
+                if !shouldEndEditing {
+                    parent.firstResponderDemandFulfilled()
+                }
+                return shouldEndEditing
+            }
+            return true
         }
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
