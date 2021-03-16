@@ -64,7 +64,7 @@ struct ContentView: View {
                     text: $email,
                     firstResponderDemand: $emailResponderDemand.animation(),
                     configuration: .email,
-                    onFirstResponderStateChanged: { isFirstResponder in
+                    onFirstResponderStateChanged: .init { isFirstResponder in
                         withAnimation {
                             isEmailFirstResponder = isFirstResponder
                         }
@@ -90,7 +90,7 @@ struct ContentView: View {
                         isSecure: hidePassword,
                         firstResponderDemand: $passwordResponderDemand.animation(),
                         configuration: .combine(.password, .lastOfChain),
-                        onFirstResponderStateChanged: { isFirstResponder in
+                        onFirstResponderStateChanged: .init { isFirstResponder in
                             withAnimation {
                                 isPasswordFirstResponder = isFirstResponder
                             }

@@ -10,9 +10,6 @@ import SwiftUI
 /// A SwiftUI wrapper around UITextField that gives precise control over the responder state.
 ///
 public struct ResponsiveTextField {
-    /// Communicates the text field's first responder state using a boolean value (is first responder).
-    public typealias FirstResponderStateChangeHandler = (Bool) -> Void
-
     /// The text field placeholder string
     let placeholder: String
 
@@ -144,6 +141,23 @@ public struct ResponsiveTextField {
 }
 
 // MARK: - Managing the first responder state
+
+public struct FirstResponderStateChangeHandler {
+    /// A closure that will be called when the first responder state changes.
+    ///
+    /// - Parameters:
+    ///     - Bool: A boolean indicating if the text field is now the first responder or not.
+    ///
+    public var handleStateChange: (Bool) -> Void
+
+    public init(handleStateChange: @escaping (Bool) -> Void) {
+        self.handleStateChange = handleStateChange
+    }
+
+    func callAsFunction(_ isFirstResponder: Bool) {
+        handleStateChange(isFirstResponder)
+    }
+}
 
 /// Represents a request to change the text field's first responder state.
 ///
