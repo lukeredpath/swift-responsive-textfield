@@ -439,5 +439,5 @@ resetting it back to `nil`.
 
 ## Licence
 
-This library is released under the Apache v2.0 license. See [LICENSE](LICENSE)
+This library is released under the Apache v2.0 licence. See [LICENCE](LICENCE)
 for details.
