@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#firstresponderstatechangehandler.init(handlestatechange:)">init(handle​State​Change:​)</a></li><li class="initializer"><a href="#firstresponderstatechangehandler.init(handlestatechange:canbecomefirstresponder:canresignfirstresponder:)">init(handle​State​Change:​can​Become​First​Responder:​can​Resign​First​Responder:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#firstresponderstatechangehandler.handlestatechange">handle​State​Change</a></li><li class="variable"><a href="#firstresponderstatechangehandler.canbecomefirstresponder">can​Become​First​Responder</a></li><li class="variable"><a href="#firstresponderstatechangehandler.canresignfirstresponder">can​Resign​First​Responder</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#firstresponderstatechangehandler.animation()">animation()</a></li><li class="function"><a href="#firstresponderstatechangehandler.updates(_:)">updates(_:​)</a></li></ul></li></ol>
+            <ol><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#firstresponderstatechangehandler.init(handlestatechange:)">init(handle​State​Change:​)</a></li><li class="initializer"><a href="#firstresponderstatechangehandler.init(handlestatechange:canbecomefirstresponder:canresignfirstresponder:)">init(handle​State​Change:​can​Become​First​Responder:​can​Resign​First​Responder:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#firstresponderstatechangehandler.handlestatechange">handle​State​Change</a></li><li class="variable"><a href="#firstresponderstatechangehandler.canbecomefirstresponder">can​Become​First​Responder</a></li><li class="variable"><a href="#firstresponderstatechangehandler.canresignfirstresponder">can​Resign​First​Responder</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#firstresponderstatechangehandler.animation(animation:)">animation(animation:​)</a></li><li class="function"><a href="#firstresponderstatechangehandler.receive(on:options:)">receive(on:​options:​)</a></li><li class="function"><a href="#firstresponderstatechangehandler.updates(_:)">updates(_:​)</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -136,17 +136,91 @@ and this returns <code>false</code> the demand will still be marked as fulfilled
     <section id="methods">
         <h2>Methods</h2>
 
-        <div role="article" class="function" id="firstresponderstatechangehandler.animation()">
+        <div role="article" class="function" id="firstresponderstatechangehandler.animation(animation:)">
     <h3>
-        <code>animation()</code>
+        <code>animation(animation:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">animation</span>() -&gt; <span class="keyword">Self</span></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">animation</span>(<span class="variable">animation</span>: <span class="type">Animation</span>? = .<span class="variable">default</span>) -&gt; <span class="keyword">Self</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Returns a new state change handler that wraps the underlying state change handler
-in a <code>withAnimation</code> closure - this is useful if you want state changes triggered by
-a first responder state change to be explicitly animated.</p>
+in a <code>withAnimation</code> closure - this is useful if your state change handler is performing
+some state change and you want that change to be animated.</p>
 
 </div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>animation</th>
+    <td><code class="type">Animation?</code></td>
+    <td><p>The animation to perform, or <code>nil</code> if you want to explicitly disable animations.</p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="firstresponderstatechangehandler.receive(on:options:)">
+    <h3>
+        <code>receive(on:​options:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">receive</span>&lt;<span class="variable">S</span>: <span class="type">Scheduler</span>&gt;(<span class="variable">on</span> <span class="variable">scheduler</span>: <span class="type">S</span>, <span class="variable">options</span>: <span class="type">S</span>.<span class="type">SchedulerOptions</span>? = <span class="keyword">nil</span>) -&gt; <span class="keyword">Self</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Returns a new state change handler that scheduldes the callback to the original state change
+handler on the given scheduler.</p>
+
+</div>
+<div class="discussion">
+    <p>This modifier is useful when your first responder state change handler needs to perform some state
+mutation that will trigger a new view update and you are programatically triggering the first responder state
+change.</p>
+
+<p>When a text field becomes first responder naturally, e.g. because the user tapped on the text field, it is
+safe to perform state changes that perform a view update inside this callback. However, programatic first
+responder state changes (where you change the demand state connected to the <code>firstResponderDemand</code>
+binding passed into <code>ResponsiveTextField</code>) happen as part of a view update - i.e. the demand change
+will trigger a view update and the <code>becomeFirstResponder()</code> call will happn in the <code>updateUIView</code>
+as part of that view change event.</p>
+
+<p>This means that the change handler callback will be called as part of the view update and if that change handler
+does something to trigger a view update itself, you will receive a runtime warning about the nested view updates.</p>
+
+<p>To break this loop, <code>ResponsiveTextField</code> could ensure that it always wraps its calls to the change handler
+on the next runloop tick, or in an async <code>DispatchQueue</code> call however this would be a pretty brute-force approach
+and would result in an unnecessary queue hop on every callback, even if it wasn't needed.</p>
+
+<p>Instead, if you are programatically triggering a first responder change and the text field and also triggering a
+view update in your state change handler, you can explicitly force that callback to happen after the view update
+cycle completes using this method. You can pass in any suitable scheduler, such as <code>RunLoop.main</code> or
+<code>DispatchQueue.main</code>.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>scheduler</th>
+    <td><code class="type">S</code></td>
+    <td><p>The scheduler to schedule the callback on when the first responder state changes.</p>
+</td>
+</tr>
+  </tbody>
+</table>
 </div>
 <div role="article" class="function" id="firstresponderstatechangehandler.updates(_:)">
     <h3>
@@ -157,6 +231,13 @@ a first responder state change to be explicitly animated.</p>
     <p>Returns a change handler that updates a <code>Bool</code> binding with the <code>isFirstResponder</code>
 value whenever it changes.</p>
 
+</div>
+<div class="discussion">
+    <aside class="note">
+    <pre><code>  onFirstResponderStateChanged: .updates($state.animation())
+</code></pre>
+
+</aside>
 </div>
 <h4>Parameters</h4>
 
@@ -187,7 +268,7 @@ value whenever it changes.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2021-03-16T16:47:52+0000">March 16, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-03-19T15:05:44+0000">March 19, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
