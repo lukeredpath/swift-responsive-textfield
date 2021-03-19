@@ -350,6 +350,85 @@ binding's wrapped value will be automatically set back to `nil`, otherwise
 `resignFirstResponder()` will be called and the binding's wrapped value will
 be set to `nil` once the first responder state has become `notFirstResponder`.
 
+### Avoiding nested view updates
+
+When using a `firstResponderStateChangeHandler` to update some state that
+triggers a view update in combination with state-driven first responder changes, it 
+is possible to end up in a situation where you are triggering a view update in the 
+middle of existing view update cycle which will result in a runtime warning about
+undefined behaviour.
+
+This can occur because state-driven first responder changes cause the text field 
+to become first responder as part of a view update - this means that the change 
+handler itself will be called during that view update so if it was to trigger another
+view update when called, it would happen within the current view update. 
+
+In the following example, a warning would occur because the change to the 
+`@State` variable results in a nested view update:
+
+```swift
+struct ExampleView: View {
+  @State
+  var someString: String
+  
+  @State
+  var firstText: String
+  
+  @State
+  var secondText: String
+  
+  @State
+  var secondResponderDemand: FirstResponderDemand
+
+  var body: some View {
+    Text("The text is: \(someString)")
+    ResponsiveTextField(
+        placeholder: "First",
+        text: $firstText,
+        handleReturn: {
+            // make the second field become first responder
+            secondResponderDemand = .shouldBecomeFirstResponder
+        }
+    )
+    ResponsiveTextField(
+        placeholder: "Second",
+        text: $secondText,
+        firstResponderDemand: 
+        onFirstResponderStateChanged: .init { _ in
+          // This will be called during the view update triggered
+          // by mutating `shouldBecomeFirstResponder` in the first
+          // field's `handleReturn` closure.
+          // This will trigger a nested state change!
+          someString = "Hello World"
+        }
+    )
+  }
+}
+```
+
+To workaround this problem, rather than the library explicitly calling the state change
+handler on the next runloop tick or on an asynchronous `DispatchQueue`, which
+might not be necessary if there is no nested state change, you can avoid the 
+problem by ensuring that the view update your state change handler triggers 
+always happens after the view update completes.
+
+A convenience modifier on `FirstResponderStateChangeHandler`, `receive(on:)`
+allows you to do this by passing in a scheduler such as a runloop or dispatch queue.
+The above example can be fixed with the following change to the second text field:
+
+```swift
+ResponsiveTextField(
+    placeholder: "Second",
+    text: $secondText,
+    firstResponderDemand: 
+    onFirstResponderStateChanged: .init { _ in
+      // This will now be triggered on the next runloop tick and
+      // will not trigger a nested state change warning.
+      someString = "Hello World"
+    }.receive(on: RunLoop.main)
+)
+```
+
 ### Example: Using `@State` to become first responder on view appear
 
 ```swift
