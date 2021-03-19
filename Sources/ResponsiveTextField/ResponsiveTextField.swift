@@ -240,9 +240,13 @@ public struct FirstResponderStateChangeHandler {
     /// `DispatchQueue.main`.
     ///
     public func receive<S: Scheduler>(on scheduler: S, options: S.SchedulerOptions? = nil) -> Self {
-        return .init { isFirstResponder in
-            scheduler.schedule { self.handleStateChange(isFirstResponder) }
-        }
+        return .init(
+            handleStateChange: { isFirstResponder in
+                scheduler.schedule { self.handleStateChange(isFirstResponder) }
+            },
+            canBecomeFirstResponder: canBecomeFirstResponder,
+            canResignFirstResponder: canResignFirstResponder
+        )
     }
 }
 
