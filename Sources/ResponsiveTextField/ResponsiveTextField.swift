@@ -2,6 +2,7 @@
 //  ResponsiveTextField.swift
 //
 
+import Combine
 import UIKit
 import SwiftUI
 
@@ -191,8 +192,9 @@ public struct FirstResponderStateChangeHandler {
     }
 
     /// Returns a new state change handler that wraps the underlying state change handler
-    /// in a `withAnimation` closure - this is useful if you want state changes triggered by
-    /// a first responder state change to be explicitly animated.
+    /// in a `withAnimation` closure - this is useful if your state change handler is performing
+    /// some state change and you want that change to be animated.
+    ///
     public func animation() -> Self {
         .init(
             handleStateChange: { isFirstResponder in
@@ -202,11 +204,52 @@ public struct FirstResponderStateChangeHandler {
             canResignFirstResponder: canResignFirstResponder
         )
     }
+
+    /// Returns a new state change handler that scheduldes the callback to the original state change
+    /// handler on the given scheduler.
+    ///
+    /// - Parameters:
+    ///     - scheduler: The scheduler to schedule the callback on when the first responder state changes.
+    ///
+    /// This modifier is useful when your first responder state change handler needs to perform some state
+    /// mutation that will trigger a new view update and you are programatically triggering the first responder state
+    /// change.
+    ///
+    /// When a text field becomes first responder naturally, e.g. because the user tapped on the text field, it is
+    /// safe to perform state changes that perform a view update inside this callback. However, programatic first
+    /// responder state changes (where you change the demand state connected to the `firstResponderDemand`
+    /// binding passed into `ResponsiveTextField`) happen as part of a view update - i.e. the demand change
+    /// will trigger a view update and the `becomeFirstResponder()` call will happn in the `updateUIView`
+    /// as part of that view change event.
+    ///
+    /// This means that the change handler callback will be called as part of the view update and if that change handler
+    /// does something to trigger a view update itself, you will receive a runtime warning about the nested view updates.
+    ///
+    /// To break this loop, `ResponsiveTextField` could ensure that it always wraps its calls to the change handler
+    /// on the next runloop tick, or in an async `DispatchQueue` call however this would be a pretty brute-force approach
+    /// and would result in an unnecessary queue hop on every callback, even if it wasn't needed.
+    ///
+    /// Instead, if you are programatically triggering a first responder change and the text field and also triggering a
+    /// view update in your state change handler, you can explicitly force that callback to happen after the view update
+    /// cycle completes using this method. You can pass in any suitable scheduler, such as `RunLoop.main` or
+    /// `DispatchQueue.main`.
+    ///
+    public func receive<S: Scheduler>(on scheduler: S, options: S.SchedulerOptions? = nil) -> Self {
+        return .init { isFirstResponder in
+            scheduler.schedule { self.handleStateChange(isFirstResponder) }
+        }
+    }
 }
 
 extension FirstResponderStateChangeHandler {
     /// Returns a change handler that updates a `Bool` binding with the `isFirstResponder`
     /// value whenever it changes.
+    ///
+    /// - Note: if you want this to trigger an animated change, instead of using the `.animation()`
+    /// modifier on `FirstResponderStateChangeHandler`, you can simply pass in an animated
+    /// binding instead:
+    ///
+    ///         onFirstResponderStateChanged: .updates($state.animation())
     ///
     /// - Parameters:
     ///     - binding: A binding to some Boolean state property that should be updated.
