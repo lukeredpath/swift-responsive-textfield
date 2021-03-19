@@ -195,10 +195,15 @@ public struct FirstResponderStateChangeHandler {
     /// in a `withAnimation` closure - this is useful if your state change handler is performing
     /// some state change and you want that change to be animated.
     ///
-    public func animation() -> Self {
+    /// - Parameters:
+    ///     - animation: The animation to perform, or `nil` if you want to explicitly disable animations.
+    ///
+    public func animation(animation: Animation? = .default) -> Self {
         .init(
             handleStateChange: { isFirstResponder in
-                withAnimation { self.handleStateChange(isFirstResponder) }
+                withAnimation(animation) {
+                    self.handleStateChange(isFirstResponder)
+                }
             },
             canBecomeFirstResponder: canBecomeFirstResponder,
             canResignFirstResponder: canResignFirstResponder
