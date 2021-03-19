@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0
+
+* Added `FirstResponderStateChangeHandler.receive(on:)` to allow change handlers
+to be called on a specfic scheduler to avoid nested view updates.
+* Added an `animation:` parameter to the `FirstResponderStateChangeHandler.animation()`
+modifier so you can provide a custom animation, or disable animations explicitly.
+
 ## 0.4.1
 
 ### Fixed
