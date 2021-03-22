@@ -259,6 +259,7 @@ struct ExampleView: View {
     )
   }
 }
+```
 
 If you need to track this state you can store it in some external state, such as
 an `@State` property or an `@ObservableObject` (like your view model):

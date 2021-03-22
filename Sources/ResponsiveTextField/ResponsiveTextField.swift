@@ -11,7 +11,7 @@ import SwiftUI
 /// A SwiftUI wrapper around UITextField that gives precise control over the responder state.
 ///
 public struct ResponsiveTextField {
-    /// The text field placeholder string
+    /// The text field placeholder string.
     let placeholder: String
 
     /// A binding to the text state that will hold the typed text
@@ -30,8 +30,8 @@ public struct ResponsiveTextField {
     ///
     /// A wrapped value of `nil` indicates there is no demand (or any previous demand has been fulfilled).
     ///
-    /// To detect when the text field actually becomes or resigns first responder, use the
-    /// `.onFirstResponderChange()` callback function.
+    /// To detect when the text field actually becomes or resigns first responder, pass in a `onFirstResponderStateChanged`
+    /// handler.
     var firstResponderDemand: Binding<FirstResponderDemand?>?
 
     /// Allows for the text field to be configured during creation.
@@ -55,7 +55,7 @@ public struct ResponsiveTextField {
     @Environment(\.textFieldTextColor)
     var textColor: UIColor
 
-    /// Sets the text field alignment - use the w`.textFieldTextAlignemnt()` modifier.
+    /// Sets the text field alignment - use the `.textFieldTextAlignemnt()` modifier.
     @Environment(\.textFieldTextAlignment)
     var textAlignment: NSTextAlignment
 
@@ -158,21 +158,24 @@ public struct FirstResponderStateChangeHandler {
     ///
     /// If the responder change was triggered programatically by a `FirstResponderDemand`
     /// and this returns `false` the demand will still be marked as fulfilled and reset to `nil`.
+    ///
     public var canBecomeFirstResponder: (() -> Bool)?
 
-    /// Allows fine-grained control over if the text field should become the first responder.
+    /// Allows fine-grained control over if the text field should resign the first responder.
     ///
     /// This will be called when the text field's `shouldEndEditing` delegate method is
     /// called and provides a final opportunity to prevent the text field from resigning first responder.
     ///
     /// If the responder change was triggered programatically by a `FirstResponderDemand`
     /// and this returns `false` the demand will still be marked as fulfilled and reset to `nil`.
+    ///
     public var canResignFirstResponder: (() -> Bool)?
 
     /// Initialises a state change handler with a `handleStateChange` callback.
     ///
     /// Most of the time this is the only callback that you will need to provide so this initialiser
     /// can be called with trailing closure syntax.
+    ///
     public init(handleStateChange: @escaping (Bool) -> Void) {
         self.handleStateChange = handleStateChange
     }
@@ -215,6 +218,7 @@ public struct FirstResponderStateChangeHandler {
     ///
     /// - Parameters:
     ///     - scheduler: The scheduler to schedule the callback on when the first responder state changes.
+    ///     - options: Options to be passed to the scheduler when scheduling.
     ///
     /// This modifier is useful when your first responder state change handler needs to perform some state
     /// mutation that will trigger a new view update and you are programatically triggering the first responder state
@@ -242,7 +246,9 @@ public struct FirstResponderStateChangeHandler {
     public func receive<S: Scheduler>(on scheduler: S, options: S.SchedulerOptions? = nil) -> Self {
         return .init(
             handleStateChange: { isFirstResponder in
-                scheduler.schedule { self.handleStateChange(isFirstResponder) }
+                scheduler.schedule(options: options) {
+                    self.handleStateChange(isFirstResponder)
+                }
             },
             canBecomeFirstResponder: canBecomeFirstResponder,
             canResignFirstResponder: canResignFirstResponder
@@ -286,11 +292,9 @@ extension ResponsiveTextField: UIViewRepresentable {
     public func makeUIView(context: Context) -> UITextField {
         let textField = _UnderlyingTextField()
         configuration.configure(textField)
-        // This stops the text field from expanding if the text overflows the frame width
         textField.handleDelete = handleDelete
         textField.supportedStandardEditActions = supportedStandardEditActions
         textField.standardEditActionHandler = standardEditActionHandler
-        textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         textField.placeholder = placeholder
         textField.text = text.wrappedValue
         textField.isEnabled = isEnabled
@@ -304,6 +308,8 @@ extension ResponsiveTextField: UIViewRepresentable {
             action: #selector(Coordinator.textFieldTextChanged(_:)),
             for: .editingChanged
         )
+        // This stops the text field from expanding if the text overflows the frame width
+        textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return textField
     }
 
@@ -314,7 +320,7 @@ extension ResponsiveTextField: UIViewRepresentable {
     /// Will update the text view when the containing view triggers a body re-calculation.
     ///
     /// If the first responder state has changed, this may trigger the textfield to become or resign
-    /// first responder status.
+    /// first responder.
     ///
     public func updateUIView(_ uiView: UITextField, context: Context) {
         guard shouldUpdateView else { return }
