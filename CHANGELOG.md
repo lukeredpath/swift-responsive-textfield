@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.1
+
+## Fixed
+
+* Bug where `shouldUpdateViews` was not getting reset correctly when first responder demand
+was fulfilled.
+* `FirstResponderStateChangeHandler.receive(on:)` operator was not passing it's `options`
+to the scheduler.
+* README and documentation fixes.
+
 ## 0.5.0
 
 ### Changed
