@@ -36,33 +36,39 @@ public enum StandardEditAction: Equatable, CaseIterable {
 public struct StandardEditActionHandling<Responder: UIResponder> {
     // MARK: - Handling cut, copy and paste commands
 
-    public typealias StandardEditingAction = (Responder, Any?) -> Bool
+    /// A closure that can be used to customise a standard edit action.
+    ///
+    /// - Parameters:
+    ///     - `Responder` - the control that this action is associated with, e.g. the `UITextField`
+    ///     - `Any?` - the sender of the action.
+    ///
+    public typealias StandardEditActionHandler = (Responder, Any?) -> Bool
 
-    public var cut: StandardEditingAction?
-    public var copy: StandardEditingAction?
-    public var paste: StandardEditingAction?
-    public var delete: StandardEditingAction?
+    public var cut: StandardEditActionHandler?
+    public var copy: StandardEditActionHandler?
+    public var paste: StandardEditActionHandler?
+    public var delete: StandardEditActionHandler?
 
     // MARK: - Handling selection commands
 
-    public var select: StandardEditingAction?
-    public var selectAll: StandardEditingAction?
+    public var select: StandardEditActionHandler?
+    public var selectAll: StandardEditActionHandler?
 
     // MARK: - Handling styled text editing
 
-    public var toggleBoldface: StandardEditingAction?
-    public var toggleItalics: StandardEditingAction?
-    public var toggleUnderline: StandardEditingAction?
+    public var toggleBoldface: StandardEditActionHandler?
+    public var toggleItalics: StandardEditActionHandler?
+    public var toggleUnderline: StandardEditActionHandler?
 
     // MARK: - Handling writing direction changes
 
-    public var makeTextWritingDirectionLeftToRight: StandardEditingAction?
-    public var makeTextWritingDirectionRightToLeft: StandardEditingAction?
+    public var makeTextWritingDirectionLeftToRight: StandardEditActionHandler?
+    public var makeTextWritingDirectionRightToLeft: StandardEditActionHandler?
 
     // MARK: - Handling size changes
 
-    public var increaseSize: StandardEditingAction?
-    public var decreaseSize: StandardEditingAction?
+    public var increaseSize: StandardEditActionHandler?
+    public var decreaseSize: StandardEditActionHandler?
 
     // MARK: - Handling other text formatting changes
 
@@ -71,19 +77,19 @@ public struct StandardEditActionHandling<Responder: UIResponder> {
     public var updateTextAttributes: ((Responder, ConversionHandler) -> Bool)?
 
     public init(
-        cut: StandardEditingAction? = nil,
-        copy: StandardEditingAction? = nil,
-        paste: StandardEditingAction? = nil,
-        delete: StandardEditingAction? = nil,
-        select: StandardEditingAction? = nil,
-        selectAll: StandardEditingAction? = nil,
-        toggleBoldface: StandardEditingAction? = nil,
-        toggleItalics: StandardEditingAction? = nil,
-        toggleUnderline: StandardEditingAction? = nil,
-        makeTextWritingDirectionLeftToRight: StandardEditingAction? = nil,
-        makeTextWritingDirectionRightToLeft: StandardEditingAction? = nil,
-        increaseSize: StandardEditingAction? = nil,
-        decreaseSize: StandardEditingAction? = nil,
+        cut: StandardEditActionHandler? = nil,
+        copy: StandardEditActionHandler? = nil,
+        paste: StandardEditActionHandler? = nil,
+        delete: StandardEditActionHandler? = nil,
+        select: StandardEditActionHandler? = nil,
+        selectAll: StandardEditActionHandler? = nil,
+        toggleBoldface: StandardEditActionHandler? = nil,
+        toggleItalics: StandardEditActionHandler? = nil,
+        toggleUnderline: StandardEditActionHandler? = nil,
+        makeTextWritingDirectionLeftToRight: StandardEditActionHandler? = nil,
+        makeTextWritingDirectionRightToLeft: StandardEditActionHandler? = nil,
+        increaseSize: StandardEditActionHandler? = nil,
+        decreaseSize: StandardEditActionHandler? = nil,
         updateTextAttributes: ((Responder, ConversionHandler) -> Bool)? = nil
     ) {
         self.cut = cut
@@ -147,124 +153,127 @@ extension _UnderlyingTextField {
 // MARK: - Standard editing action handling
 
 extension _UnderlyingTextField {
-    override func cut(_ sender: Any?) {
+    typealias EditActionHandling = StandardEditActionHandling<UITextField>
+    typealias EditActionHandler = EditActionHandling.StandardEditActionHandler
+
+    /// Performs a standard edit action function, deferring to the original implementation if there is no standard edit action handler.
+    ///
+    /// If a standard edit action handler has been provided and it implements the specified override, it will call the override and
+    /// if the override returns `true`, it will also call the original.
+    ///
+    /// If a standard edit action handler has been provided and it does not implement the specified override, the original will
+    /// be called.
+    private func performStandardEditActionHandler(
+        sender: Any?,
+        original: (Any?) -> Void,
+        override: KeyPath<EditActionHandling, EditActionHandler?>
+    ) {
         guard let actions = standardEditActionHandler else {
-            super.cut(sender)
+            original(sender)
             return
         }
-        if actions.cut?(self, sender) == true {
-            super.cut(sender)
+        if let override = actions[keyPath: override] {
+            let callOriginal = override(self, sender)
+            if callOriginal { original(sender) }
+        } else {
+            original(sender)
         }
+    }
+
+    override func cut(_ sender: Any?) {
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.cut,
+            override: \.cut
+        )
     }
 
     override func copy(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.copy(sender)
-            return
-        }
-        if actions.copy?(self, sender) == true {
-            super.copy(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.copy,
+            override: \.copy
+        )
     }
 
     override func paste(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.paste(sender)
-            return
-        }
-        if actions.paste?(self, sender) == true {
-            super.paste(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.paste,
+            override: \.paste
+        )
     }
 
     override func select(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.select(sender)
-            return
-        }
-        if actions.select?(self, sender) == true {
-            super.select(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.select,
+            override: \.select
+        )
     }
 
     override func selectAll(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.selectAll(sender)
-            return
-        }
-        if actions.selectAll?(self, sender) == true {
-            super.selectAll(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.selectAll,
+            override: \.selectAll
+        )
     }
 
     override func toggleBoldface(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.toggleBoldface(sender)
-            return
-        }
-        if actions.toggleBoldface?(self, sender) == true {
-            super.toggleBoldface(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.toggleBoldface,
+            override: \.toggleBoldface
+        )
     }
 
     override func toggleItalics(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.toggleItalics(sender)
-            return
-        }
-        if actions.toggleItalics?(self, sender) == true {
-            super.toggleItalics(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.toggleItalics,
+            override: \.toggleItalics
+        )
     }
 
     override func toggleUnderline(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.toggleUnderline(sender)
-            return
-        }
-        if actions.toggleUnderline?(self, sender) == true {
-            super.toggleUnderline(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.toggleUnderline,
+            override: \.toggleUnderline
+        )
     }
 
     override func makeTextWritingDirectionLeftToRight(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.makeTextWritingDirectionLeftToRight(sender)
-            return
-        }
-        if actions.makeTextWritingDirectionLeftToRight?(self, sender) == true {
-            super.makeTextWritingDirectionLeftToRight(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.makeTextWritingDirectionLeftToRight,
+            override: \.makeTextWritingDirectionLeftToRight
+        )
     }
 
     override func makeTextWritingDirectionRightToLeft(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.makeTextWritingDirectionRightToLeft(sender)
-            return
-        }
-        if actions.makeTextWritingDirectionRightToLeft?(self, sender) == true {
-            super.makeTextWritingDirectionRightToLeft(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.makeTextWritingDirectionRightToLeft,
+            override: \.makeTextWritingDirectionRightToLeft
+        )
     }
 
     override func increaseSize(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.increaseSize(sender)
-            return
-        }
-        if actions.increaseSize?(self, sender) == true {
-            super.increaseSize(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.increaseSize,
+            override: \.increaseSize
+        )
     }
 
     override func decreaseSize(_ sender: Any?) {
-        guard let actions = standardEditActionHandler else {
-            super.decreaseSize(sender)
-            return
-        }
-        if actions.decreaseSize?(self, sender) == true {
-            super.decreaseSize(sender)
-        }
+        performStandardEditActionHandler(
+            sender: sender,
+            original: super.decreaseSize,
+            override: \.decreaseSize
+        )
     }
 
     override func updateTextAttributes(conversionHandler: ([NSAttributedString.Key : Any]) -> [NSAttributedString.Key : Any]) {
@@ -272,7 +281,12 @@ extension _UnderlyingTextField {
             super.updateTextAttributes(conversionHandler: conversionHandler)
             return
         }
-        if actions.updateTextAttributes?(self, conversionHandler) == true {
+        if let override = actions.updateTextAttributes {
+            let callOriginal = override(self, conversionHandler)
+            if callOriginal {
+                super.updateTextAttributes(conversionHandler: conversionHandler)
+            }
+        } else {
             super.updateTextAttributes(conversionHandler: conversionHandler)
         }
     }

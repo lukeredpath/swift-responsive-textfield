@@ -8,6 +8,9 @@
 was fulfilled.
 * `FirstResponderStateChangeHandler.receive(on:)` operator was not passing it's `options`
 to the scheduler.
+* Fixed a bug in standard edit action handling where the original implementation would not get 
+called if a standard edit action handling value was given but no override for the specific edit action
+existed.
 * README and documentation fixes.
 
 ## 0.5.0
