@@ -106,8 +106,6 @@ public struct ResponsiveTextField {
     /// behaviour will be called.
     var standardEditActionHandler: StandardEditActionHandling<UITextField>?
 
-    fileprivate var shouldUpdateView: Bool = true
-
     public init(
         placeholder: String,
         text: Binding<String>,
@@ -132,12 +130,6 @@ public struct ResponsiveTextField {
         self.shouldChange = shouldChange
         self.supportedStandardEditActions = supportedStandardEditActions
         self.standardEditActionHandler = standardEditActionHandler
-    }
-
-    fileprivate mutating func firstResponderDemandFulfilled() {
-        shouldUpdateView = false
-        firstResponderDemand?.wrappedValue = nil
-        shouldUpdateView = false
     }
 }
 
@@ -323,7 +315,10 @@ extension ResponsiveTextField: UIViewRepresentable {
     /// first responder.
     ///
     public func updateUIView(_ uiView: UITextField, context: Context) {
-        guard shouldUpdateView else { return }
+        guard context.coordinator.shouldUpdateView else {
+            context.coordinator.shouldUpdateView = true
+            return
+        }
 
         uiView.isEnabled = isEnabled
         uiView.isSecureTextEntry = isSecure
@@ -336,13 +331,19 @@ extension ResponsiveTextField: UIViewRepresentable {
             uiView.resignFirstResponder()
         case (false, .shouldBecomeFirstResponder):
             uiView.becomeFirstResponder()
+        case (_, nil):
+            // If there is no demand then there's nothing to do.
+            break
         default:
-            context.coordinator.resetFirstResponderDemand()
+            // If the current responder state matches the demand then
+            // the demand is already fulfilled so we can just reset it.
+            context.coordinator.firstResponderDemandFulfilled()
         }
     }
 
     public class Coordinator: NSObject, UITextFieldDelegate {
         var parent: ResponsiveTextField
+        var shouldUpdateView: Bool = true
 
         @Binding
         var text: String
@@ -352,15 +353,16 @@ extension ResponsiveTextField: UIViewRepresentable {
             self._text = textField.text
         }
 
-        public func resetFirstResponderDemand() {
-            parent.firstResponderDemandFulfilled()
+        fileprivate func firstResponderDemandFulfilled() {
+            shouldUpdateView = false
+            parent.firstResponderDemand?.wrappedValue = nil
         }
 
         public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
             if let canBecomeFirstResponder = parent.onFirstResponderStateChanged?.canBecomeFirstResponder {
                 let shouldBeginEditing = canBecomeFirstResponder()
                 if !shouldBeginEditing {
-                    parent.firstResponderDemandFulfilled()
+                    firstResponderDemandFulfilled()
                 }
                 return shouldBeginEditing
             }
@@ -369,14 +371,14 @@ extension ResponsiveTextField: UIViewRepresentable {
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
             parent.onFirstResponderStateChanged?(true)
-            parent.firstResponderDemandFulfilled()
+            firstResponderDemandFulfilled()
         }
 
         public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
             if let canResignFirstResponder = parent.onFirstResponderStateChanged?.canResignFirstResponder {
                 let shouldEndEditing = canResignFirstResponder()
                 if !shouldEndEditing {
-                    parent.firstResponderDemandFulfilled()
+                    firstResponderDemandFulfilled()
                 }
                 return shouldEndEditing
             }
@@ -385,7 +387,7 @@ extension ResponsiveTextField: UIViewRepresentable {
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
             parent.onFirstResponderStateChanged?(false)
-            parent.firstResponderDemandFulfilled()
+            firstResponderDemandFulfilled()
         }
 
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
