@@ -315,11 +315,6 @@ extension ResponsiveTextField: UIViewRepresentable {
     /// first responder.
     ///
     public func updateUIView(_ uiView: UITextField, context: Context) {
-        guard context.coordinator.shouldUpdateView else {
-            context.coordinator.shouldUpdateView = true
-            return
-        }
-
         uiView.isEnabled = isEnabled
         uiView.isSecureTextEntry = isSecure
         uiView.returnKeyType = returnKeyType
@@ -337,13 +332,22 @@ extension ResponsiveTextField: UIViewRepresentable {
         default:
             // If the current responder state matches the demand then
             // the demand is already fulfilled so we can just reset it.
-            context.coordinator.firstResponderDemandFulfilled()
+            resetFirstResponderDemandAfterViewUpdate()
+        }
+    }
+
+    fileprivate func resetFirstResponderDemandAfterViewUpdate() {
+        // Because the first responder demand will trigger a view
+        // update when it is set, we need to wait until the next
+        // runloop tick to reset it back to nil to avoid runtime
+        // warnings.
+        RunLoop.main.schedule {
+            firstResponderDemand?.wrappedValue = nil
         }
     }
 
     public class Coordinator: NSObject, UITextFieldDelegate {
         var parent: ResponsiveTextField
-        var shouldUpdateView: Bool = true
 
         @Binding
         var text: String
@@ -353,16 +357,11 @@ extension ResponsiveTextField: UIViewRepresentable {
             self._text = textField.text
         }
 
-        fileprivate func firstResponderDemandFulfilled() {
-            shouldUpdateView = false
-            parent.firstResponderDemand?.wrappedValue = nil
-        }
-
         public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
             if let canBecomeFirstResponder = parent.onFirstResponderStateChanged?.canBecomeFirstResponder {
                 let shouldBeginEditing = canBecomeFirstResponder()
                 if !shouldBeginEditing {
-                    firstResponderDemandFulfilled()
+                    parent.resetFirstResponderDemandAfterViewUpdate()
                 }
                 return shouldBeginEditing
             }
@@ -371,14 +370,14 @@ extension ResponsiveTextField: UIViewRepresentable {
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
             parent.onFirstResponderStateChanged?(true)
-            firstResponderDemandFulfilled()
+            parent.resetFirstResponderDemandAfterViewUpdate()
         }
 
         public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
             if let canResignFirstResponder = parent.onFirstResponderStateChanged?.canResignFirstResponder {
                 let shouldEndEditing = canResignFirstResponder()
                 if !shouldEndEditing {
-                    firstResponderDemandFulfilled()
+                    parent.resetFirstResponderDemandAfterViewUpdate()
                 }
                 return shouldEndEditing
             }
@@ -387,7 +386,7 @@ extension ResponsiveTextField: UIViewRepresentable {
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
             parent.onFirstResponderStateChanged?(false)
-            firstResponderDemandFulfilled()
+            parent.resetFirstResponderDemandAfterViewUpdate()
         }
 
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
