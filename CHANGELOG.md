@@ -1,14 +1,24 @@
 # Changelog
 
+## 0.5.2
+
+### Fixed
+
+* Ensure responder demand is reset on the next runloop tick to avoid a runtime
+error due to a nested state update.
+* Workaround for what seems to be a compiler or xccov bug that causes coverage
+data to become malformed when passing a reference to a super implementation
+in a point-free manner.
+
 ## 0.5.1
 
-## Fixed
+### Fixed
 
 * Bug where `shouldUpdateViews` was not getting reset correctly when first responder demand
 was fulfilled.
 * `FirstResponderStateChangeHandler.receive(on:)` operator was not passing it's `options`
 to the scheduler.
-* Fixed a bug in standard edit action handling where the original implementation would not get 
+* Fixed a bug in standard edit action handling where the original implementation would not get
 called if a standard edit action handling value was given but no override for the specific edit action
 existed.
 * README and documentation fixes.
