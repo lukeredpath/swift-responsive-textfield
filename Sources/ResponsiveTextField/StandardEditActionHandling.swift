@@ -183,7 +183,7 @@ extension _UnderlyingTextField {
     override func cut(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.cut,
+            original: { super.cut($0) },
             override: \.cut
         )
     }
@@ -191,7 +191,7 @@ extension _UnderlyingTextField {
     override func copy(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.copy,
+            original: { super.copy($0) },
             override: \.copy
         )
     }
@@ -199,7 +199,7 @@ extension _UnderlyingTextField {
     override func paste(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.paste,
+            original: { super.paste($0) },
             override: \.paste
         )
     }
@@ -207,7 +207,7 @@ extension _UnderlyingTextField {
     override func select(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.select,
+            original: { super.select($0) },
             override: \.select
         )
     }
@@ -215,7 +215,7 @@ extension _UnderlyingTextField {
     override func selectAll(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.selectAll,
+            original: { super.selectAll($0) },
             override: \.selectAll
         )
     }
@@ -223,7 +223,7 @@ extension _UnderlyingTextField {
     override func toggleBoldface(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.toggleBoldface,
+            original: { super.toggleBoldface($0) },
             override: \.toggleBoldface
         )
     }
@@ -231,7 +231,7 @@ extension _UnderlyingTextField {
     override func toggleItalics(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.toggleItalics,
+            original: { super.toggleItalics($0) },
             override: \.toggleItalics
         )
     }
@@ -239,7 +239,7 @@ extension _UnderlyingTextField {
     override func toggleUnderline(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.toggleUnderline,
+            original: { super.toggleUnderline($0) },
             override: \.toggleUnderline
         )
     }
@@ -247,7 +247,7 @@ extension _UnderlyingTextField {
     override func makeTextWritingDirectionLeftToRight(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.makeTextWritingDirectionLeftToRight,
+            original: { super.makeTextWritingDirectionLeftToRight($0) },
             override: \.makeTextWritingDirectionLeftToRight
         )
     }
@@ -255,7 +255,7 @@ extension _UnderlyingTextField {
     override func makeTextWritingDirectionRightToLeft(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.makeTextWritingDirectionRightToLeft,
+            original: { super.makeTextWritingDirectionRightToLeft($0) },
             override: \.makeTextWritingDirectionRightToLeft
         )
     }
@@ -263,7 +263,7 @@ extension _UnderlyingTextField {
     override func increaseSize(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.increaseSize,
+            original: { super.increaseSize($0) },
             override: \.increaseSize
         )
     }
@@ -271,7 +271,7 @@ extension _UnderlyingTextField {
     override func decreaseSize(_ sender: Any?) {
         performStandardEditActionHandler(
             sender: sender,
-            original: super.decreaseSize,
+            original: { super.decreaseSize($0) },
             override: \.decreaseSize
         )
     }
