@@ -51,6 +51,11 @@ public struct ResponsiveTextField {
     @Environment(\.textFieldFont)
     var font: UIFont
 
+    /// Sets the text field's adjusts font for content size category attribute - use the
+    /// `.responsiveTextFieldAdjustsFontForContentSizeCategory` modifier.
+    @Environment(\.adjustsFontForContentSizeCategory)
+    var adjustsFontForContentSizeCategory: Bool
+
     /// Sets the text field color - use the `.responsiveTextFieldColor()` modifier.
     @Environment(\.textFieldTextColor)
     var textColor: UIColor
@@ -220,7 +225,7 @@ public struct FirstResponderStateChangeHandler {
     /// safe to perform state changes that perform a view update inside this callback. However, programatic first
     /// responder state changes (where you change the demand state connected to the `firstResponderDemand`
     /// binding passed into `ResponsiveTextField`) happen as part of a view update - i.e. the demand change
-    /// will trigger a view update and the `becomeFirstResponder()` call will happn in the `updateUIView`
+    /// will trigger a view update and the `becomeFirstResponder()` call will happen in the `updateUIView`
     /// as part of that view change event.
     ///
     /// This means that the change handler callback will be called as part of the view update and if that change handler
@@ -292,6 +297,7 @@ extension ResponsiveTextField: UIViewRepresentable {
         textField.isEnabled = isEnabled
         textField.isSecureTextEntry = isSecure
         textField.font = font
+        textField.adjustsFontForContentSizeCategory = adjustsFontForContentSizeCategory
         textField.textColor = textColor
         textField.textAlignment = textAlignment
         textField.returnKeyType = returnKeyType
@@ -319,6 +325,7 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.isSecureTextEntry = isSecure
         uiView.returnKeyType = returnKeyType
         uiView.font = font
+        uiView.adjustsFontForContentSizeCategory =  adjustsFontForContentSizeCategory
         uiView.text = text.wrappedValue
 
         switch (uiView.isFirstResponder, firstResponderDemand?.wrappedValue) {
@@ -514,6 +521,10 @@ public extension View {
     func responsiveTextFieldTextAlignment(_ alignment: NSTextAlignment) -> some View {
         environment(\.textFieldTextAlignment, alignment)
     }
+
+    func responsiveTextFieldAdjustsFontForContentSizeCategory(_ value: Bool) -> some View {
+        environment(\.adjustsFontForContentSizeCategory, value)
+    }
 }
 
 // MARK: - Previews
@@ -556,6 +567,14 @@ struct ResponsiveTextField_Previews: PreviewProvider {
                 .responsiveTextFieldTextColor(.systemBlue)
                 .previewLayout(.sizeThatFits)
                 .previewDisplayName("Text Styling")
+
+            TextFieldPreview(configuration: .email, text: "example@example.com")
+                .responsiveTextFieldFont(.preferredFont(forTextStyle: .body))
+                .responsiveTextFieldTextColor(.systemBlue)
+                .responsiveTextFieldAdjustsFontForContentSizeCategory(true)
+                .previewLayout(.sizeThatFits)
+                .environment(\.sizeCategory, .extraExtraExtraLarge)
+                .previewDisplayName("Dynamic Font Size")
 
             TextFieldPreview(configuration: .empty, text: "This is some text")
                 .responsiveTextFieldTextAlignment(.center)
