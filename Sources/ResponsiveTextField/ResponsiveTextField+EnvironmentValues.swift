@@ -29,10 +29,6 @@ extension ResponsiveTextField {
     fileprivate struct FirstResponderDemandKey: EnvironmentKey {
         static let defaultValue: FirstResponderDemand? = nil
     }
-
-    fileprivate struct AdjustsFontForContentSizeCategoryKey: EnvironmentKey {
-        static let defaultValue: Bool = true
-    }
 }
 
 // MARK: - Environment Values
@@ -61,10 +57,5 @@ extension EnvironmentValues {
     var firstResponderStateDemand: FirstResponderDemand? {
         get { self[ResponsiveTextField.FirstResponderDemandKey.self] }
         set { self[ResponsiveTextField.FirstResponderDemandKey.self] = newValue }
-    }
-
-    var adjustsFontForContentSizeCategory: Bool {
-        get { self[ResponsiveTextField.AdjustsFontForContentSizeCategoryKey.self] }
-        set { self[ResponsiveTextField.AdjustsFontForContentSizeCategoryKey.self] = newValue }
     }
 }
