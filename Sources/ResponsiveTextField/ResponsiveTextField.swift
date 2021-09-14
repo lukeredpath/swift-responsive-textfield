@@ -48,12 +48,15 @@ public struct ResponsiveTextField {
     var returnKeyType: UIReturnKeyType
 
     /// Sets the text field font - use the `.responsiveKeyboardFont()` modifier.
+    ///
+    /// - Note: the font will only be set once when the underlying text field is first created - the text field
+    /// will not respond to changes in this value, however it will automatically scale it's font in response to
+    /// content size category changes unless you explicitly disable this behaviour.
+    ///
     @Environment(\.textFieldFont)
     var font: UIFont
 
-    /// Sets the text field's adjusts font for content size category attribute - use the
-    /// `.responsiveTextFieldAdjustsFontForContentSizeCategory` modifier.
-    @Environment(\.adjustsFontForContentSizeCategory)
+    /// When `true`, configures the text field to automatically adjust its font based on the content size category.
     var adjustsFontForContentSizeCategory: Bool
 
     /// Sets the text field color - use the `.responsiveTextFieldColor()` modifier.
@@ -115,6 +118,7 @@ public struct ResponsiveTextField {
         placeholder: String,
         text: Binding<String>,
         isSecure: Bool = false,
+        adjustsFontForContentSizeCategory: Bool = true,
         firstResponderDemand: Binding<FirstResponderDemand?>? = nil,
         configuration: Configuration = .empty,
         onFirstResponderStateChanged: FirstResponderStateChangeHandler? = nil,
@@ -129,6 +133,7 @@ public struct ResponsiveTextField {
         self.firstResponderDemand = firstResponderDemand
         self.isSecure = isSecure
         self.configuration = configuration
+        self.adjustsFontForContentSizeCategory = adjustsFontForContentSizeCategory
         self.onFirstResponderStateChanged = onFirstResponderStateChanged
         self.handleReturn = handleReturn
         self.handleDelete = handleDelete
@@ -324,8 +329,6 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.isEnabled = isEnabled
         uiView.isSecureTextEntry = isSecure
         uiView.returnKeyType = returnKeyType
-        uiView.font = font
-        uiView.adjustsFontForContentSizeCategory =  adjustsFontForContentSizeCategory
         uiView.text = text.wrappedValue
 
         switch (uiView.isFirstResponder, firstResponderDemand?.wrappedValue) {
