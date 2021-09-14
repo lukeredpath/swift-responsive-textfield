@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/luke/Code/lukeredpath/ResponsiveTextField/Demo Project/ResponsiveTextFieldDemo.xcodeproj">
+      location = "group:Demo Project/ResponsiveTextFieldDemo.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:">

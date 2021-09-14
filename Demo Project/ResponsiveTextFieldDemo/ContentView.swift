@@ -77,6 +77,7 @@ struct ContentView: View {
                         }
                     )
                 )
+                .responsiveTextFieldFont(.preferredFont(forTextStyle: .title1))
                 .responsiveKeyboardReturnType(.next)
                 .responsiveTextFieldTextColor(.blue)
                 .fixedSize(horizontal: false, vertical: true)
