@@ -49,14 +49,18 @@ public struct ResponsiveTextField {
 
     /// Sets the text field font - use the `.responsiveKeyboardFont()` modifier.
     ///
-    /// - Note: the font will only be set once when the underlying text field is first created - the text field
-    /// will not respond to changes in this value, however it will automatically scale it's font in response to
-    /// content size category changes unless you explicitly disable this behaviour.
+    /// - Note: if `adjustsFontForContentSizeCategory` is `true`, the font will only be set
+    /// to this value once when the underlying text field is first created.
     ///
     @Environment(\.textFieldFont)
     var font: UIFont
 
     /// When `true`, configures the text field to automatically adjust its font based on the content size category.
+    ///
+    /// - Note: When set to `true`, the underlying text field will not respond to changes to the `textFieldFont`
+    /// environment variable. If you want to implement your own dynamic/state-driven font changes you should set this
+    /// to `false` and handle font size adjustment manually.
+    ///
     var adjustsFontForContentSizeCategory: Bool
 
     /// Sets the text field color - use the `.responsiveTextFieldColor()` modifier.
@@ -331,6 +335,13 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.returnKeyType = returnKeyType
         uiView.text = text.wrappedValue
 
+        if !adjustsFontForContentSizeCategory {
+            // We should only support dynamic font changes using our own environment
+            // value if dynamic type support is disabled otherwise we will override
+            // the automatically adjusted font.
+            uiView.font = font
+        }
+
         switch (uiView.isFirstResponder, firstResponderDemand?.wrappedValue) {
         case (true, .shouldResignFirstResponder):
             uiView.resignFirstResponder()
@@ -524,10 +535,6 @@ public extension View {
     func responsiveTextFieldTextAlignment(_ alignment: NSTextAlignment) -> some View {
         environment(\.textFieldTextAlignment, alignment)
     }
-
-    func responsiveTextFieldAdjustsFontForContentSizeCategory(_ value: Bool) -> some View {
-        environment(\.adjustsFontForContentSizeCategory, value)
-    }
 }
 
 // MARK: - Previews
@@ -574,7 +581,6 @@ struct ResponsiveTextField_Previews: PreviewProvider {
             TextFieldPreview(configuration: .email, text: "example@example.com")
                 .responsiveTextFieldFont(.preferredFont(forTextStyle: .body))
                 .responsiveTextFieldTextColor(.systemBlue)
-                .responsiveTextFieldAdjustsFontForContentSizeCategory(true)
                 .previewLayout(.sizeThatFits)
                 .environment(\.sizeCategory, .extraExtraExtraLarge)
                 .previewDisplayName("Dynamic Font Size")
