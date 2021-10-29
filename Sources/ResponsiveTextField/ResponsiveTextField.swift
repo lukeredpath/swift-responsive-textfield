@@ -344,9 +344,9 @@ extension ResponsiveTextField: UIViewRepresentable {
 
         switch (uiView.isFirstResponder, firstResponderDemand?.wrappedValue) {
         case (true, .shouldResignFirstResponder):
-            uiView.resignFirstResponder()
+            RunLoop.main.schedule { uiView.resignFirstResponder() }
         case (false, .shouldBecomeFirstResponder):
-            uiView.becomeFirstResponder()
+            RunLoop.main.schedule { uiView.becomeFirstResponder() }
         case (_, nil):
             // If there is no demand then there's nothing to do.
             break
