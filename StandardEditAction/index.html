@@ -14,7 +14,6 @@
             </strong>
             <span>Documentation</span>
         </a>
-        <sup>Beta</sup>
     </header>
 
     <!--
@@ -37,7 +36,9 @@
     <code class="name">Standard​Edit​Action</code>
 </h1>
 
-<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">enum</span> <span class="type">StandardEditAction</span></code></pre></body></html>
+<div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">enum</span> <span class="type">StandardEditAction</span>: <span class="type">Equatable</span>, <span class="type">CaseIterable</span>  </body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>Defines all of the standard editing actions that can be performed.</p>
 
@@ -76,7 +77,7 @@
 <text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Equatable</text>
 </g>
 <!-- StandardEditAction&#45;&gt;Equatable -->
-<g id="edge2" class="edge conformsTo">
+<g id="edge1" class="edge conformsTo">
 <title>StandardEditAction&#45;&gt;Equatable</title>
 <path fill="none" stroke="#000000" d="M375.5134,-71.9243C344.4871,-61.9959 305.8297,-49.6255 273.3694,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="274.1008,-35.7975 263.5098,-36.0831 271.9673,-42.4645 274.1008,-35.7975"/>
@@ -88,7 +89,7 @@
 <text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">CaseIterable</text>
 </g>
 <!-- StandardEditAction&#45;&gt;CaseIterable -->
-<g id="edge1" class="edge conformsTo">
+<g id="edge2" class="edge conformsTo">
 <title>StandardEditAction&#45;&gt;CaseIterable</title>
 <path fill="none" stroke="#000000" d="M488.4866,-71.9243C519.5129,-61.9959 558.1703,-49.6255 590.6306,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="592.0327,-42.4645 600.4902,-36.0831 589.8992,-35.7975 592.0327,-42.4645"/>
@@ -110,87 +111,115 @@
 
         <div role="article" class="case" id="standardeditaction.cut">
     <h3>
-        <code>cut</code>
+        <code><a href="#standardeditaction.cut">cut</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">cut</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">cut</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.copy">
     <h3>
-        <code>copy</code>
+        <code><a href="#standardeditaction.copy">copy</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">copy</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">copy</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.paste">
     <h3>
-        <code>paste</code>
+        <code><a href="#standardeditaction.paste">paste</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">paste</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">paste</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.delete">
     <h3>
-        <code>delete</code>
+        <code><a href="#standardeditaction.delete">delete</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">delete</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">delete</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.select">
     <h3>
-        <code>select</code>
+        <code><a href="#standardeditaction.select">select</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">select</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">select</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.selectall">
     <h3>
-        <code>select​All</code>
+        <code><a href="#standardeditaction.selectall">select​All</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">selectAll</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">selectAll</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.toggleboldface">
     <h3>
-        <code>toggle​Boldface</code>
+        <code><a href="#standardeditaction.toggleboldface">toggle​Boldface</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">toggleBoldface</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">toggleBoldface</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.toggleitalics">
     <h3>
-        <code>toggle​Italics</code>
+        <code><a href="#standardeditaction.toggleitalics">toggle​Italics</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">toggleItalics</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">toggleItalics</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.toggleunderline">
     <h3>
-        <code>toggle​Underline</code>
+        <code><a href="#standardeditaction.toggleunderline">toggle​Underline</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">toggleUnderline</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">toggleUnderline</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.maketextwritingdirectionlefttoright">
     <h3>
-        <code>make​Text​Writing​Direction​Left​ToRight</code>
+        <code><a href="#standardeditaction.maketextwritingdirectionlefttoright">make​Text​Writing​Direction​Left​ToRight</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">makeTextWritingDirectionLeftToRight</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">makeTextWritingDirectionLeftToRight</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.maketextwritingdirectionrighttoleft">
     <h3>
-        <code>make​Text​Writing​Direction​Right​ToLeft</code>
+        <code><a href="#standardeditaction.maketextwritingdirectionrighttoleft">make​Text​Writing​Direction​Right​ToLeft</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">makeTextWritingDirectionRightToLeft</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">makeTextWritingDirectionRightToLeft</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.increasesize">
     <h3>
-        <code>increase​Size</code>
+        <code><a href="#standardeditaction.increasesize">increase​Size</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">increaseSize</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">increaseSize</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.decreasesize">
     <h3>
-        <code>decrease​Size</code>
+        <code><a href="#standardeditaction.decreasesize">decrease​Size</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">decreaseSize</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">decreaseSize</span></body></html></code></pre>
+</div>
 </div>
 <div role="article" class="case" id="standardeditaction.updatetextattributes">
     <h3>
-        <code>update​Text​Attributes</code>
+        <code><a href="#standardeditaction.updatetextattributes">update​Text​Attributes</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">updateTextAttributes</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">updateTextAttributes</span></body></html></code></pre>
+</div>
 </div>
     </section>
 
@@ -201,7 +230,7 @@
 
     <footer>
         <p>
-    Generated on <time datetime="2021-03-28T02:32:01+0000">March 28, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-10-29T14:37:58+0000">October 29, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-rc.1</span>.
 </p>
     </footer>
 </body>

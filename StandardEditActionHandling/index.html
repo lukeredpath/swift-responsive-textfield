@@ -14,7 +14,6 @@
             </strong>
             <span>Documentation</span>
         </a>
-        <sup>Beta</sup>
     </header>
 
     <!--
@@ -37,7 +36,9 @@
     <code class="name">Standard​Edit​Action​Handling</code>
 </h1>
 
-<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">StandardEditActionHandling</span>&lt;<span class="variable">Responder</span>: <span class="type">UIResponder</span>&gt;</code></pre></body></html>
+<div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">StandardEditActionHandling</span>&lt;<span class="variable">Responder</span>: <span class="type">UIResponder</span>&gt;  </body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>A protocol-witness style implementation of the <code>UIResponderStandardEditActions</code>
 protocol that can be used to override the default behaviour of <code>UITextField</code>.</p>
@@ -46,13 +47,10 @@ protocol that can be used to override the default behaviour of <code>UITextField
 <div class="discussion">
     <p>All of the functions return a <code>Bool</code>. Returning <code>false</code> to prevent the default behaviour.</p>
 
-<ul>
-<li>
-<p>See Also: <code>UIResponderStandardEditActions</code> documentation for more details on
-what each editing action does.</p>
-</li>
-</ul>
+<aside class="see also" title="See Also">
+    <p><code>UIResponderStandardEditActions</code> documentation for more details on what each editing action does.</p>
 
+</aside>
 </div>
 
     <section id="nested type aliases">
@@ -60,9 +58,11 @@ what each editing action does.</p>
 
         <div role="article" class="typealias" id="standardeditactionhandling.standardeditactionhandler">
     <h3>
-        <code>Standard​Edit​Action​Handler</code>
+        <code><a href="#standardeditactionhandling.standardeditactionhandler">Standard​Edit​Action​Handler</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">typealias</span> <span class="variable">StandardEditActionHandler</span> = (<span class="type">Responder</span>, <span class="keyword">Any</span>?) -&gt; <span class="type">Bool</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">typealias</span> <span class="variable">StandardEditActionHandler</span> = (<span class="type">Responder</span>, <span class="keyword">Any</span>?) -&gt; <span class="type">Bool</span></body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>A closure that can be used to customise a standard edit action.</p>
 
@@ -81,9 +81,11 @@ what each editing action does.</p>
 </div>
 <div role="article" class="typealias" id="standardeditactionhandling.conversionhandler">
     <h3>
-        <code>Conversion​Handler</code>
+        <code><a href="#standardeditactionhandling.conversionhandler">Conversion​Handler</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">typealias</span> <span class="variable">ConversionHandler</span> = ([<span class="type">NSAttributedString</span>.<span class="type">Key</span> : <span class="keyword">Any</span>]) -&gt; [<span class="type">NSAttributedString</span>.<span class="type">Key</span> : <span class="keyword">Any</span>]</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">typealias</span> <span class="variable">ConversionHandler</span> = ([<span class="type">NSAttributedString</span>.<span class="type">Key</span> : <span class="keyword">Any</span>]) -&gt; [<span class="type">NSAttributedString</span>.<span class="type">Key</span> : <span class="keyword">Any</span>] </body></html></code></pre>
+</div>
 </div>
     </section>
     <section id="initializers">
@@ -91,9 +93,26 @@ what each editing action does.</p>
 
         <div role="article" class="initializer" id="standardeditactionhandling.init(cut:copy:paste:delete:select:selectall:toggleboldface:toggleitalics:toggleunderline:maketextwritingdirectionlefttoright:maketextwritingdirectionrighttoleft:increasesize:decreasesize:updatetextattributes:)">
     <h3>
-        <code>init(cut:​copy:​paste:​delete:​select:​select​All:​toggle​Boldface:​toggle​Italics:​toggle​Underline:​make​Text​Writing​Direction​Left​ToRight:​make​Text​Writing​Direction​Right​ToLeft:​increase​Size:​decrease​Size:​update​Text​Attributes:​)</code>
+        <code><a href="#standardeditactionhandling.init(cut:copy:paste:delete:select:selectall:toggleboldface:toggleitalics:toggleunderline:maketextwritingdirectionlefttoright:maketextwritingdirectionrighttoleft:increasesize:decreasesize:updatetextattributes:)">init(cut:​copy:​paste:​delete:​select:​select​All:​toggle​Boldface:​toggle​Italics:​toggle​Underline:​make​Text​Writing​Direction​Left​ToRight:​make​Text​Writing​Direction​Right​ToLeft:​increase​Size:​decrease​Size:​update​Text​Attributes:​)</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">cut</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">copy</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">paste</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">delete</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">select</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">selectAll</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">toggleBoldface</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">toggleItalics</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">toggleUnderline</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">makeTextWritingDirectionLeftToRight</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">makeTextWritingDirectionRightToLeft</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">increaseSize</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">decreaseSize</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>, <span class="variable">updateTextAttributes</span>: ((<span class="type">Responder</span>, <span class="type">ConversionHandler</span>) -&gt; <span class="type">Bool</span>)? = <span class="keyword">nil</span>)</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">init</span>(
+        <span class="variable">cut</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">copy</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">paste</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">delete</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">select</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">selectAll</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">toggleBoldface</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">toggleItalics</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">toggleUnderline</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">makeTextWritingDirectionLeftToRight</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">makeTextWritingDirectionRightToLeft</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">increaseSize</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">decreaseSize</span>: <span class="type">StandardEditActionHandler</span>? = <span class="keyword">nil</span>,
+        <span class="variable">updateTextAttributes</span>: ((<span class="type">Responder</span>, <span class="type">ConversionHandler</span>) -&gt; <span class="type">Bool</span>)? = <span class="keyword">nil</span>
+    )  </body></html></code></pre>
+</div>
 </div>
     </section>
     <section id="properties">
@@ -101,87 +120,115 @@ what each editing action does.</p>
 
         <div role="article" class="variable" id="standardeditactionhandling.cut">
     <h3>
-        <code>cut</code>
+        <code><a href="#standardeditactionhandling.cut">cut</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">cut</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">cut</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.copy">
     <h3>
-        <code>copy</code>
+        <code><a href="#standardeditactionhandling.copy">copy</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">copy</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">copy</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.paste">
     <h3>
-        <code>paste</code>
+        <code><a href="#standardeditactionhandling.paste">paste</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">paste</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">paste</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.delete">
     <h3>
-        <code>delete</code>
+        <code><a href="#standardeditactionhandling.delete">delete</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">delete</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">delete</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.select">
     <h3>
-        <code>select</code>
+        <code><a href="#standardeditactionhandling.select">select</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">select</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">select</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.selectall">
     <h3>
-        <code>select​All</code>
+        <code><a href="#standardeditactionhandling.selectall">select​All</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">selectAll</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">selectAll</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.toggleboldface">
     <h3>
-        <code>toggle​Boldface</code>
+        <code><a href="#standardeditactionhandling.toggleboldface">toggle​Boldface</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">toggleBoldface</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">toggleBoldface</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.toggleitalics">
     <h3>
-        <code>toggle​Italics</code>
+        <code><a href="#standardeditactionhandling.toggleitalics">toggle​Italics</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">toggleItalics</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">toggleItalics</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.toggleunderline">
     <h3>
-        <code>toggle​Underline</code>
+        <code><a href="#standardeditactionhandling.toggleunderline">toggle​Underline</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">toggleUnderline</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">toggleUnderline</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.maketextwritingdirectionlefttoright">
     <h3>
-        <code>make​Text​Writing​Direction​Left​ToRight</code>
+        <code><a href="#standardeditactionhandling.maketextwritingdirectionlefttoright">make​Text​Writing​Direction​Left​ToRight</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">makeTextWritingDirectionLeftToRight</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">makeTextWritingDirectionLeftToRight</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.maketextwritingdirectionrighttoleft">
     <h3>
-        <code>make​Text​Writing​Direction​Right​ToLeft</code>
+        <code><a href="#standardeditactionhandling.maketextwritingdirectionrighttoleft">make​Text​Writing​Direction​Right​ToLeft</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">makeTextWritingDirectionRightToLeft</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">makeTextWritingDirectionRightToLeft</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.increasesize">
     <h3>
-        <code>increase​Size</code>
+        <code><a href="#standardeditactionhandling.increasesize">increase​Size</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">increaseSize</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">increaseSize</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.decreasesize">
     <h3>
-        <code>decrease​Size</code>
+        <code><a href="#standardeditactionhandling.decreasesize">decrease​Size</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">decreaseSize</span>: <span class="type">StandardEditActionHandler</span>?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">decreaseSize</span>: <span class="type">StandardEditActionHandler</span>? </body></html></code></pre>
+</div>
 </div>
 <div role="article" class="variable" id="standardeditactionhandling.updatetextattributes">
     <h3>
-        <code>update​Text​Attributes</code>
+        <code><a href="#standardeditactionhandling.updatetextattributes">update​Text​Attributes</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">updateTextAttributes</span>: ((<span class="type">Responder</span>, <span class="type">ConversionHandler</span>) -&gt; <span class="type">Bool</span>)?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">updateTextAttributes</span>: ((<span class="type">Responder</span>, <span class="type">ConversionHandler</span>) -&gt; <span class="type">Bool</span>)? </body></html></code></pre>
+</div>
 </div>
     </section>
 
@@ -192,7 +239,7 @@ what each editing action does.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2021-03-28T02:32:00+0000">March 28, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-10-29T14:37:58+0000">October 29, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-rc.1</span>.
 </p>
     </footer>
 </body>

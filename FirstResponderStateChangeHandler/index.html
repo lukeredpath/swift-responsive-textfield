@@ -14,7 +14,6 @@
             </strong>
             <span>Documentation</span>
         </a>
-        <sup>Beta</sup>
     </header>
 
     <!--
@@ -37,16 +36,20 @@
     <code class="name">First​Responder​State​Change​Handler</code>
 </h1>
 
-<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">FirstResponderStateChangeHandler</span></code></pre></body></html>
+<div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">FirstResponderStateChangeHandler</span>  </body></html></code></pre>
+</div>
 
     <section id="initializers">
         <h2>Initializers</h2>
 
         <div role="article" class="initializer" id="firstresponderstatechangehandler.init(handlestatechange:)">
     <h3>
-        <code>init(handle​State​Change:​)</code>
+        <code><a href="#firstresponderstatechangehandler.init(handlestatechange:)">init(handle​State​Change:​)</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">handleStateChange</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Bool</span>) -&gt; <span class="type">Void</span>)</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">handleStateChange</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Bool</span>) -&gt; <span class="type">Void</span>)  </body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>Initialises a state change handler with a <code>handleStateChange</code> callback.</p>
 
@@ -59,9 +62,15 @@ can be called with trailing closure syntax.</p>
 </div>
 <div role="article" class="initializer" id="firstresponderstatechangehandler.init(handlestatechange:canbecomefirstresponder:canresignfirstresponder:)">
     <h3>
-        <code>init(handle​State​Change:​can​Become​First​Responder:​can​Resign​First​Responder:​)</code>
+        <code><a href="#firstresponderstatechangehandler.init(handlestatechange:canbecomefirstresponder:canresignfirstresponder:)">init(handle​State​Change:​can​Become​First​Responder:​can​Resign​First​Responder:​)</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">handleStateChange</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Bool</span>) -&gt; <span class="type">Void</span>, <span class="variable">canBecomeFirstResponder</span>: (() -&gt; <span class="type">Bool</span>)? = <span class="keyword">nil</span>, <span class="variable">canResignFirstResponder</span>: (() -&gt; <span class="type">Bool</span>)? = <span class="keyword">nil</span>)</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">init</span>(
+        <span class="variable">handleStateChange</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Bool</span>) -&gt; <span class="type">Void</span>,
+        <span class="variable">canBecomeFirstResponder</span>: (() -&gt; <span class="type">Bool</span>)? = <span class="keyword">nil</span>,
+        <span class="variable">canResignFirstResponder</span>: (() -&gt; <span class="type">Bool</span>)? = <span class="keyword">nil</span>
+    )  </body></html></code></pre>
+</div>
 </div>
     </section>
     <section id="properties">
@@ -69,9 +78,11 @@ can be called with trailing closure syntax.</p>
 
         <div role="article" class="variable" id="firstresponderstatechangehandler.handlestatechange">
     <h3>
-        <code>handle​State​Change</code>
+        <code><a href="#firstresponderstatechangehandler.handlestatechange">handle​State​Change</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">handleStateChange</span>: (<span class="type">Bool</span>) -&gt; <span class="type">Void</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">handleStateChange</span>: (<span class="type">Bool</span>) -&gt; <span class="type">Void</span></body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>A closure that will be called when the first responder state changes.</p>
 
@@ -98,9 +109,11 @@ can be called with trailing closure syntax.</p>
 </div>
 <div role="article" class="variable" id="firstresponderstatechangehandler.canbecomefirstresponder">
     <h3>
-        <code>can​Become​First​Responder</code>
+        <code><a href="#firstresponderstatechangehandler.canbecomefirstresponder">can​Become​First​Responder</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">canBecomeFirstResponder</span>: (() -&gt; <span class="type">Bool</span>)?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">canBecomeFirstResponder</span>: (() -&gt; <span class="type">Bool</span>)? </body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>Allows fine-grained control over if the text field should become the first responder.</p>
 
@@ -116,9 +129,11 @@ and this returns <code>false</code> the demand will still be marked as fulfilled
 </div>
 <div role="article" class="variable" id="firstresponderstatechangehandler.canresignfirstresponder">
     <h3>
-        <code>can​Resign​First​Responder</code>
+        <code><a href="#firstresponderstatechangehandler.canresignfirstresponder">can​Resign​First​Responder</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">canResignFirstResponder</span>: (() -&gt; <span class="type">Bool</span>)?</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">var</span> <span class="variable">canResignFirstResponder</span>: (() -&gt; <span class="type">Bool</span>)? </body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>Allows fine-grained control over if the text field should resign the first responder.</p>
 
@@ -138,9 +153,11 @@ and this returns <code>false</code> the demand will still be marked as fulfilled
 
         <div role="article" class="function" id="firstresponderstatechangehandler.animation(animation:)">
     <h3>
-        <code>animation(animation:​)</code>
+        <code><a href="#firstresponderstatechangehandler.animation(animation:)">animation(animation:​)</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">animation</span>(<span class="variable">animation</span>: <span class="type">Animation</span>? = .<span class="variable">default</span>) -&gt; <span class="keyword">Self</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">animation</span>(<span class="variable">animation</span>: <span class="type">Animation</span>? = .<span class="variable">default</span>) -&gt; <span class="keyword">Self</span>  </body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>Returns a new state change handler that wraps the underlying state change handler
 in a <code>withAnimation</code> closure - this is useful if your state change handler is performing
@@ -169,9 +186,11 @@ some state change and you want that change to be animated.</p>
 </div>
 <div role="article" class="function" id="firstresponderstatechangehandler.receive(on:options:)">
     <h3>
-        <code>receive(on:​options:​)</code>
+        <code><a href="#firstresponderstatechangehandler.receive(on:options:)">receive(on:​options:​)</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">receive</span>&lt;<span class="variable">S</span>: <span class="type">Scheduler</span>&gt;(<span class="variable">on</span> <span class="variable">scheduler</span>: <span class="type">S</span>, <span class="variable">options</span>: <span class="type">S</span>.<span class="type">SchedulerOptions</span>? = <span class="keyword">nil</span>) -&gt; <span class="keyword">Self</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">receive</span>&lt;<span class="variable">S</span>: <span class="type">Scheduler</span>&gt;(<span class="variable">on</span> <span class="variable">scheduler</span>: <span class="type">S</span>, <span class="variable">options</span>: <span class="type">S</span>.<span class="type">SchedulerOptions</span>? = <span class="keyword">nil</span>) -&gt; <span class="keyword">Self</span>  </body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>Returns a new state change handler that scheduldes the callback to the original state change
 handler on the given scheduler.</p>
@@ -186,7 +205,7 @@ change.</p>
 safe to perform state changes that perform a view update inside this callback. However, programatic first
 responder state changes (where you change the demand state connected to the <code>firstResponderDemand</code>
 binding passed into <code>ResponsiveTextField</code>) happen as part of a view update - i.e. the demand change
-will trigger a view update and the <code>becomeFirstResponder()</code> call will happn in the <code>updateUIView</code>
+will trigger a view update and the <code>becomeFirstResponder()</code> call will happen in the <code>updateUIView</code>
 as part of that view change event.</p>
 
 <p>This means that the change handler callback will be called as part of the view update and if that change handler
@@ -230,16 +249,18 @@ cycle completes using this method. You can pass in any suitable scheduler, such 
 </div>
 <div role="article" class="function" id="firstresponderstatechangehandler.updates(_:)">
     <h3>
-        <code>updates(_:​)</code>
+        <code><a href="#firstresponderstatechangehandler.updates(_:)">updates(_:​)</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">func</span> <span class="function">updates</span>(<span class="keyword">_</span> <span class="variable">binding</span>: <span class="type">Binding</span>&lt;<span class="type">Bool</span>&gt;) -&gt; <span class="keyword">Self</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">func</span> <span class="function">updates</span>(<span class="keyword">_</span> <span class="variable">binding</span>: <span class="type">Binding</span>&lt;<span class="type">Bool</span>&gt;) -&gt; <span class="keyword">Self</span>  </body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>Returns a change handler that updates a <code>Bool</code> binding with the <code>isFirstResponder</code>
 value whenever it changes.</p>
 
 </div>
 <div class="discussion">
-    <aside class="note">
+    <aside class="note" title="Note">
     <pre><code>  onFirstResponderStateChanged: .updates($state.animation())
 </code></pre>
 
@@ -274,7 +295,7 @@ value whenever it changes.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2021-03-28T02:32:00+0000">March 28, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-10-29T14:37:58+0000">October 29, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-rc.1</span>.
 </p>
     </footer>
 </body>
