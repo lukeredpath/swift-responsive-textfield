@@ -12,12 +12,15 @@ let package = Package(
             targets: ["ResponsiveTextField"]),
     ],
     dependencies: [
-        .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.8.1")
+        .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.8.1"),
+        .package(name: "combine-schedulers", url: "https://github.com/pointfreeco/combine-schedulers.git", from: "0.5.3")
     ],
     targets: [
         .target(
             name: "ResponsiveTextField",
-            dependencies: []),
+            dependencies: [
+                .product(name: "CombineSchedulers", package: "combine-schedulers")
+            ]),
         .testTarget(
             name: "ResponsiveTextFieldTests",
             dependencies: ["ResponsiveTextField", "SnapshotTesting"],

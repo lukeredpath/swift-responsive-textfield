@@ -5,6 +5,7 @@
 //  Created by Luke Redpath on 14/03/2021.
 //
 
+import CombineSchedulers
 import SwiftUI
 
 // MARK: - Environment Keys
@@ -28,6 +29,10 @@ extension ResponsiveTextField {
 
     fileprivate struct FirstResponderDemandKey: EnvironmentKey {
         static let defaultValue: FirstResponderDemand? = nil
+    }
+
+    fileprivate struct ResponderSchedulerKey: EnvironmentKey {
+        static let defaultValue: AnySchedulerOf<RunLoop> = .main
     }
 }
 
@@ -57,5 +62,10 @@ extension EnvironmentValues {
     var firstResponderStateDemand: FirstResponderDemand? {
         get { self[ResponsiveTextField.FirstResponderDemandKey.self] }
         set { self[ResponsiveTextField.FirstResponderDemandKey.self] = newValue }
+    }
+
+    public var responderScheduler: AnySchedulerOf<RunLoop> {
+        get { self[ResponsiveTextField.ResponderSchedulerKey.self] }
+        set { self[ResponsiveTextField.ResponderSchedulerKey.self] = newValue }
     }
 }

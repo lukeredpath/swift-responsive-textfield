@@ -5,6 +5,7 @@
 import Combine
 import UIKit
 import SwiftUI
+import CombineSchedulers
 
 // MARK: - Main Interface
 
@@ -70,6 +71,9 @@ public struct ResponsiveTextField {
     /// Sets the text field alignment - use the `.textFieldTextAlignemnt()` modifier.
     @Environment(\.textFieldTextAlignment)
     var textAlignment: NSTextAlignment
+
+    @Environment(\.responderScheduler)
+    private var responderScheduler: AnySchedulerOf<RunLoop>
 
     /// A calllback function that will be called whenever the first responder state changes.
     var onFirstResponderStateChanged: FirstResponderStateChangeHandler?
@@ -344,25 +348,25 @@ extension ResponsiveTextField: UIViewRepresentable {
 
         switch (uiView.isFirstResponder, firstResponderDemand?.wrappedValue) {
         case (true, .shouldResignFirstResponder):
-            RunLoop.main.schedule { uiView.resignFirstResponder() }
+            responderScheduler.schedule { uiView.resignFirstResponder() }
         case (false, .shouldBecomeFirstResponder):
-            RunLoop.main.schedule { uiView.becomeFirstResponder() }
+            responderScheduler.schedule { uiView.becomeFirstResponder() }
         case (_, nil):
             // If there is no demand then there's nothing to do.
             break
         default:
             // If the current responder state matches the demand then
             // the demand is already fulfilled so we can just reset it.
-            resetFirstResponderDemandAfterViewUpdate()
+            resetFirstResponderDemand()
         }
     }
 
-    fileprivate func resetFirstResponderDemandAfterViewUpdate() {
+    fileprivate func resetFirstResponderDemand() {
         // Because the first responder demand will trigger a view
         // update when it is set, we need to wait until the next
         // runloop tick to reset it back to nil to avoid runtime
         // warnings.
-        RunLoop.main.schedule {
+        responderScheduler.schedule {
             firstResponderDemand?.wrappedValue = nil
         }
     }
@@ -382,7 +386,7 @@ extension ResponsiveTextField: UIViewRepresentable {
             if let canBecomeFirstResponder = parent.onFirstResponderStateChanged?.canBecomeFirstResponder {
                 let shouldBeginEditing = canBecomeFirstResponder()
                 if !shouldBeginEditing {
-                    parent.resetFirstResponderDemandAfterViewUpdate()
+                    parent.resetFirstResponderDemand()
                 }
                 return shouldBeginEditing
             }
@@ -391,14 +395,14 @@ extension ResponsiveTextField: UIViewRepresentable {
 
         public func textFieldDidBeginEditing(_ textField: UITextField) {
             parent.onFirstResponderStateChanged?(true)
-            parent.resetFirstResponderDemandAfterViewUpdate()
+            parent.resetFirstResponderDemand()
         }
 
         public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
             if let canResignFirstResponder = parent.onFirstResponderStateChanged?.canResignFirstResponder {
                 let shouldEndEditing = canResignFirstResponder()
                 if !shouldEndEditing {
-                    parent.resetFirstResponderDemandAfterViewUpdate()
+                    parent.resetFirstResponderDemand()
                 }
                 return shouldEndEditing
             }
@@ -407,7 +411,7 @@ extension ResponsiveTextField: UIViewRepresentable {
 
         public func textFieldDidEndEditing(_ textField: UITextField) {
             parent.onFirstResponderStateChanged?(false)
-            parent.resetFirstResponderDemandAfterViewUpdate()
+            parent.resetFirstResponderDemand()
         }
 
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
