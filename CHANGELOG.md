@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.0
+
+* Replace hardcoded dependency on RunLoop.main to an environment-controlled scheduler.
+
+## 0.6.0
+
+### Fixed
+
+* Ensure text field responder state changes always happen on the next runloop tick to avoid attribute graph cycles in Xcode 13.
+* Added improvements to support dynamic type.
+
 ## 0.5.2
 
 ### Fixed
