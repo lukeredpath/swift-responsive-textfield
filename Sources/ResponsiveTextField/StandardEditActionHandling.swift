@@ -111,183 +111,183 @@ public struct StandardEditActionHandling<Responder: UIResponder> {
 
 // MARK: - Supported standard editing actions
 
-extension _UnderlyingTextField {
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        guard let supportedActions = supportedStandardEditActions else {
-            return super.canPerformAction(action, withSender: true)
-        }
-        switch action {
-        case #selector(cut(_:)):
-            return supportedActions.contains(.cut)
-        case #selector(copy(_:)):
-            return supportedActions.contains(.copy)
-        case #selector(paste(_:)):
-            return supportedActions.contains(.paste)
-        case #selector(select(_:)):
-            return supportedActions.contains(.select)
-        case #selector(selectAll(_:)):
-            return supportedActions.contains(.selectAll)
-        case #selector(toggleBoldface(_:)):
-            return supportedActions.contains(.toggleBoldface)
-        case #selector(toggleItalics(_:)):
-            return supportedActions.contains(.toggleItalics)
-        case #selector(toggleUnderline(_:)):
-            return supportedActions.contains(.toggleUnderline)
-        case #selector(makeTextWritingDirectionLeftToRight(_:)):
-            return supportedActions.contains(.makeTextWritingDirectionLeftToRight)
-        case #selector(makeTextWritingDirectionRightToLeft(_:)):
-            return supportedActions.contains(.makeTextWritingDirectionRightToLeft)
-        case #selector(increaseSize(_:)):
-            return supportedActions.contains(.increaseSize)
-        case #selector(decreaseSize(_:)):
-            return supportedActions.contains(.decreaseSize)
-        case #selector(updateTextAttributes(conversionHandler:)):
-            return supportedActions.contains(.updateTextAttributes)
-        default:
-            // Return the default for any unhandled actions
-            return super.canPerformAction(action, withSender: true)
-        }
-    }
-}
-
-// MARK: - Standard editing action handling
-
-extension _UnderlyingTextField {
-    typealias EditActionHandling = StandardEditActionHandling<UITextField>
-    typealias EditActionHandler = EditActionHandling.StandardEditActionHandler
-
-    /// Performs a standard edit action function, deferring to the original implementation if there is no standard edit action handler.
-    ///
-    /// If a standard edit action handler has been provided and it implements the specified override, it will call the override and
-    /// if the override returns `true`, it will also call the original.
-    ///
-    /// If a standard edit action handler has been provided and it does not implement the specified override, the original will
-    /// be called.
-    private func performStandardEditActionHandler(
-        sender: Any?,
-        original: (Any?) -> Void,
-        override: KeyPath<EditActionHandling, EditActionHandler?>
-    ) {
-        guard let actions = standardEditActionHandler else {
-            original(sender)
-            return
-        }
-        if let override = actions[keyPath: override] {
-            let callOriginal = override(self, sender)
-            if callOriginal { original(sender) }
-        } else {
-            original(sender)
-        }
-    }
-
-    override func cut(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.cut($0) },
-            override: \.cut
-        )
-    }
-
-    override func copy(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.copy($0) },
-            override: \.copy
-        )
-    }
-
-    override func paste(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.paste($0) },
-            override: \.paste
-        )
-    }
-
-    override func select(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.select($0) },
-            override: \.select
-        )
-    }
-
-    override func selectAll(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.selectAll($0) },
-            override: \.selectAll
-        )
-    }
-
-    override func toggleBoldface(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.toggleBoldface($0) },
-            override: \.toggleBoldface
-        )
-    }
-
-    override func toggleItalics(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.toggleItalics($0) },
-            override: \.toggleItalics
-        )
-    }
-
-    override func toggleUnderline(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.toggleUnderline($0) },
-            override: \.toggleUnderline
-        )
-    }
-
-    override func makeTextWritingDirectionLeftToRight(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.makeTextWritingDirectionLeftToRight($0) },
-            override: \.makeTextWritingDirectionLeftToRight
-        )
-    }
-
-    override func makeTextWritingDirectionRightToLeft(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.makeTextWritingDirectionRightToLeft($0) },
-            override: \.makeTextWritingDirectionRightToLeft
-        )
-    }
-
-    override func increaseSize(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.increaseSize($0) },
-            override: \.increaseSize
-        )
-    }
-
-    override func decreaseSize(_ sender: Any?) {
-        performStandardEditActionHandler(
-            sender: sender,
-            original: { super.decreaseSize($0) },
-            override: \.decreaseSize
-        )
-    }
-
-    override func updateTextAttributes(conversionHandler: ([NSAttributedString.Key : Any]) -> [NSAttributedString.Key : Any]) {
-        guard let actions = standardEditActionHandler else {
-            super.updateTextAttributes(conversionHandler: conversionHandler)
-            return
-        }
-        if let override = actions.updateTextAttributes {
-            let callOriginal = override(self, conversionHandler)
-            if callOriginal {
-                super.updateTextAttributes(conversionHandler: conversionHandler)
-            }
-        } else {
-            super.updateTextAttributes(conversionHandler: conversionHandler)
-        }
-    }
-}
+//extension _UnderlyingTextField {
+//    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+//        guard let supportedActions = supportedStandardEditActions else {
+//            return super.canPerformAction(action, withSender: true)
+//        }
+//        switch action {
+//        case #selector(cut(_:)):
+//            return supportedActions.contains(.cut)
+//        case #selector(copy(_:)):
+//            return supportedActions.contains(.copy)
+//        case #selector(paste(_:)):
+//            return supportedActions.contains(.paste)
+//        case #selector(select(_:)):
+//            return supportedActions.contains(.select)
+//        case #selector(selectAll(_:)):
+//            return supportedActions.contains(.selectAll)
+//        case #selector(toggleBoldface(_:)):
+//            return supportedActions.contains(.toggleBoldface)
+//        case #selector(toggleItalics(_:)):
+//            return supportedActions.contains(.toggleItalics)
+//        case #selector(toggleUnderline(_:)):
+//            return supportedActions.contains(.toggleUnderline)
+//        case #selector(makeTextWritingDirectionLeftToRight(_:)):
+//            return supportedActions.contains(.makeTextWritingDirectionLeftToRight)
+//        case #selector(makeTextWritingDirectionRightToLeft(_:)):
+//            return supportedActions.contains(.makeTextWritingDirectionRightToLeft)
+//        case #selector(increaseSize(_:)):
+//            return supportedActions.contains(.increaseSize)
+//        case #selector(decreaseSize(_:)):
+//            return supportedActions.contains(.decreaseSize)
+//        case #selector(updateTextAttributes(conversionHandler:)):
+//            return supportedActions.contains(.updateTextAttributes)
+//        default:
+//            // Return the default for any unhandled actions
+//            return super.canPerformAction(action, withSender: true)
+//        }
+//    }
+//}
+//
+//// MARK: - Standard editing action handling
+//
+//extension _UnderlyingTextField {
+//    typealias EditActionHandling = StandardEditActionHandling<UITextField>
+//    typealias EditActionHandler = EditActionHandling.StandardEditActionHandler
+//
+//    /// Performs a standard edit action function, deferring to the original implementation if there is no standard edit action handler.
+//    ///
+//    /// If a standard edit action handler has been provided and it implements the specified override, it will call the override and
+//    /// if the override returns `true`, it will also call the original.
+//    ///
+//    /// If a standard edit action handler has been provided and it does not implement the specified override, the original will
+//    /// be called.
+//    private func performStandardEditActionHandler(
+//        sender: Any?,
+//        original: (Any?) -> Void,
+//        override: KeyPath<EditActionHandling, EditActionHandler?>
+//    ) {
+//        guard let actions = standardEditActionHandler else {
+//            original(sender)
+//            return
+//        }
+//        if let override = actions[keyPath: override] {
+//            let callOriginal = override(self, sender)
+//            if callOriginal { original(sender) }
+//        } else {
+//            original(sender)
+//        }
+//    }
+//
+//    override func cut(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.cut($0) },
+//            override: \.cut
+//        )
+//    }
+//
+//    override func copy(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.copy($0) },
+//            override: \.copy
+//        )
+//    }
+//
+//    override func paste(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.paste($0) },
+//            override: \.paste
+//        )
+//    }
+//
+//    override func select(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.select($0) },
+//            override: \.select
+//        )
+//    }
+//
+//    override func selectAll(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.selectAll($0) },
+//            override: \.selectAll
+//        )
+//    }
+//
+//    override func toggleBoldface(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.toggleBoldface($0) },
+//            override: \.toggleBoldface
+//        )
+//    }
+//
+//    override func toggleItalics(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.toggleItalics($0) },
+//            override: \.toggleItalics
+//        )
+//    }
+//
+//    override func toggleUnderline(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.toggleUnderline($0) },
+//            override: \.toggleUnderline
+//        )
+//    }
+//
+//    override func makeTextWritingDirectionLeftToRight(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.makeTextWritingDirectionLeftToRight($0) },
+//            override: \.makeTextWritingDirectionLeftToRight
+//        )
+//    }
+//
+//    override func makeTextWritingDirectionRightToLeft(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.makeTextWritingDirectionRightToLeft($0) },
+//            override: \.makeTextWritingDirectionRightToLeft
+//        )
+//    }
+//
+//    override func increaseSize(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.increaseSize($0) },
+//            override: \.increaseSize
+//        )
+//    }
+//
+//    override func decreaseSize(_ sender: Any?) {
+//        performStandardEditActionHandler(
+//            sender: sender,
+//            original: { super.decreaseSize($0) },
+//            override: \.decreaseSize
+//        )
+//    }
+//
+//    override func updateTextAttributes(conversionHandler: ([NSAttributedString.Key : Any]) -> [NSAttributedString.Key : Any]) {
+//        guard let actions = standardEditActionHandler else {
+//            super.updateTextAttributes(conversionHandler: conversionHandler)
+//            return
+//        }
+//        if let override = actions.updateTextAttributes {
+//            let callOriginal = override(self, conversionHandler)
+//            if callOriginal {
+//                super.updateTextAttributes(conversionHandler: conversionHandler)
+//            }
+//        } else {
+//            super.updateTextAttributes(conversionHandler: conversionHandler)
+//        }
+//    }
+//}
