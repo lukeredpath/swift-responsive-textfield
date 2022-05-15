@@ -19,11 +19,11 @@ jobs:
         scheme: ResponsiveTextField
         destination: "platform=iOS Simulator,OS=15.2,name=iPhone 12"
         action: test
-        derived-data-path: DerivedData
+        derived-data-path: /tmp/DerivedData
         enable-code-coverage: true
     - uses: michaelhenry/swifty-code-coverage@v1.0.0
       with:
-        build-path: DerivedData
+        build-path: /tmp/DerivedData
         target: ResponsiveTextFieldTests.xctest
         is-spm: false
     - name: Publish to code climate
