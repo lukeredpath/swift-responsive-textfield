@@ -24,8 +24,8 @@ jobs:
     - uses: michaelhenry/swifty-code-coverage@v1.0.0
       with:
         build-path: DerivedData
-        target: ResponsiveTextField
-        is-spm: true
+        target: ResponsiveTextField.xctest
+        is-spm: false
     - name: Publish to code climate
       uses: paambaati/codeclimate-action@v3.0.0
       env:
