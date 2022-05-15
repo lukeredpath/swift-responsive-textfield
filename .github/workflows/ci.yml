@@ -25,7 +25,7 @@ jobs:
       with:
         build-path: /tmp/DerivedData
         target: ResponsiveTextFieldTests.xctest
-        is-spm: false
+        is-spm: true
     - name: Publish to code climate
       uses: paambaati/codeclimate-action@v3.0.0
       env:
