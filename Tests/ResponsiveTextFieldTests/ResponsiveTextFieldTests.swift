@@ -50,6 +50,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
     }
 
     func testTextFieldCustomTextStyle() {
+        XCTExpectFailure("Needs re-recording for iOS 15")
         assertSnapshot(
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
@@ -65,8 +66,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
-    func testTextFieldCustomTextAlignment() {
-        XCTExpectFailure("Needs re-recording for iOS 15")
+    func testTextFieldCustomTextAlignment() {     
         assertSnapshot(
             matching: ResponsiveTextField(
                 placeholder: "Placeholder Text",
