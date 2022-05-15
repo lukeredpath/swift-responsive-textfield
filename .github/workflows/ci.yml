@@ -20,3 +20,16 @@ jobs:
         destination: "platform=iOS Simulator,OS=15.2,name=iPhone 12"
         action: test
         enable-code-coverage: true
+        derived-data-path: DerivedData
+    - uses: michaelhenry/swifty-code-coverage@v1.0.0
+      with:
+        build-path: DerivedData
+        target: ResponsiveTextField
+        is-spm: true
+    - name: Publish to code climate
+      uses: paambaati/codeclimate-action@v3.0.0
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      with:
+        coverageLocations: |
+          coverage/lcov.info:lcov
