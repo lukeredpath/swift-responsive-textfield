@@ -24,10 +24,10 @@ public struct ResponsiveTextField {
     /// some external state.
     let isSecure: Bool
 
-    /// Can be used to programatically control the text field's first responder state.
+    /// Can be used to programmatically control the text field's first responder state.
     ///
     /// When the binding's wrapped value is set, it will cause the text field to try and become or resign first responder status
-    /// either on first initialisation or on subsequent view updates.
+    /// either on first initialization or on subsequent view updates.
     ///
     /// A wrapped value of `nil` indicates there is no demand (or any previous demand has been fulfilled).
     ///
@@ -68,14 +68,14 @@ public struct ResponsiveTextField {
     @Environment(\.textFieldTextColor)
     var textColor: UIColor
 
-    /// Sets the text field alignment - use the `.textFieldTextAlignemnt()` modifier.
+    /// Sets the text field alignment - use the `.textFieldTextAlignment()` modifier.
     @Environment(\.textFieldTextAlignment)
     var textAlignment: NSTextAlignment
 
     @Environment(\.responderScheduler)
     private var responderScheduler: AnySchedulerOf<RunLoop>
 
-    /// A calllback function that will be called whenever the first responder state changes.
+    /// A callback function that will be called whenever the first responder state changes.
     var onFirstResponderStateChanged: FirstResponderStateChangeHandler?
 
     /// A callback function that will be called when the user taps the keyboard return button.
@@ -166,7 +166,7 @@ public struct FirstResponderStateChangeHandler {
     /// This will be called when the text field's `shouldBeginEditing` delegate method is
     /// called and provides a final opportunity to prevent the text field becoming first responder.
     ///
-    /// If the responder change was triggered programatically by a `FirstResponderDemand`
+    /// If the responder change was triggered programmatically by a `FirstResponderDemand`
     /// and this returns `false` the demand will still be marked as fulfilled and reset to `nil`.
     ///
     public var canBecomeFirstResponder: (() -> Bool)?
@@ -176,12 +176,12 @@ public struct FirstResponderStateChangeHandler {
     /// This will be called when the text field's `shouldEndEditing` delegate method is
     /// called and provides a final opportunity to prevent the text field from resigning first responder.
     ///
-    /// If the responder change was triggered programatically by a `FirstResponderDemand`
+    /// If the responder change was triggered programmatically by a `FirstResponderDemand`
     /// and this returns `false` the demand will still be marked as fulfilled and reset to `nil`.
     ///
     public var canResignFirstResponder: (() -> Bool)?
 
-    /// Initialises a state change handler with a `handleStateChange` callback.
+    /// Initialise a state change handler with a `handleStateChange` callback.
     ///
     /// Most of the time this is the only callback that you will need to provide so this initialiser
     /// can be called with trailing closure syntax.
@@ -223,7 +223,7 @@ public struct FirstResponderStateChangeHandler {
         )
     }
 
-    /// Returns a new state change handler that scheduldes the callback to the original state change
+    /// Returns a new state change handler that schedules the callback to the original state change
     /// handler on the given scheduler.
     ///
     /// - Parameters:
@@ -231,7 +231,7 @@ public struct FirstResponderStateChangeHandler {
     ///     - options: Options to be passed to the scheduler when scheduling.
     ///
     /// This modifier is useful when your first responder state change handler needs to perform some state
-    /// mutation that will trigger a new view update and you are programatically triggering the first responder state
+    /// mutation that will trigger a new view update and you are programmatically triggering the first responder state
     /// change.
     ///
     /// When a text field becomes first responder naturally, e.g. because the user tapped on the text field, it is
@@ -248,7 +248,7 @@ public struct FirstResponderStateChangeHandler {
     /// on the next runloop tick, or in an async `DispatchQueue` call however this would be a pretty brute-force approach
     /// and would result in an unnecessary queue hop on every callback, even if it wasn't needed.
     ///
-    /// Instead, if you are programatically triggering a first responder change and the text field and also triggering a
+    /// Instead, if you are programmatically triggering a first responder change and the text field and also triggering a
     /// view update in your state change handler, you can explicitly force that callback to happen after the view update
     /// cycle completes using this method. You can pass in any suitable scheduler, such as `RunLoop.main` or
     /// `DispatchQueue.main`.
@@ -338,6 +338,8 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.isSecureTextEntry = isSecure
         uiView.returnKeyType = returnKeyType
         uiView.text = text.wrappedValue
+        uiView.textColor = textColor
+        uiView.textAlignment = textAlignment
 
         if !adjustsFontForContentSizeCategory {
             // We should only support dynamic font changes using our own environment
