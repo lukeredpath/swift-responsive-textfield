@@ -27,7 +27,7 @@ public struct ResponsiveTextField {
     /// Can be used to programmatically control the text field's first responder state.
     ///
     /// When the binding's wrapped value is set, it will cause the text field to try and become or resign first responder status
-    /// either on first initialization or on subsequent view updates.
+    /// either on first initialisation or on subsequent view updates.
     ///
     /// A wrapped value of `nil` indicates there is no demand (or any previous demand has been fulfilled).
     ///
