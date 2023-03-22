@@ -122,6 +122,8 @@ public struct ResponsiveTextField {
     /// behaviour will be called.
     var standardEditActionHandler: StandardEditActionHandling<UITextField>?
 
+    var accessibilityIdentifier: String?
+
     public init(
         placeholder: String,
         text: Binding<String>,
@@ -134,7 +136,8 @@ public struct ResponsiveTextField {
         handleDelete: ((String) -> Void)? = nil,
         shouldChange: ((String, String) -> Bool)? = nil,
         supportedStandardEditActions: Set<StandardEditAction>? = nil,
-        standardEditActionHandler: StandardEditActionHandling<UITextField>? = nil
+        standardEditActionHandler: StandardEditActionHandling<UITextField>? = nil,
+        accessibilityIdentifier: String? = nil
     ) {
         self.placeholder = placeholder
         self.text = text
@@ -148,6 +151,7 @@ public struct ResponsiveTextField {
         self.shouldChange = shouldChange
         self.supportedStandardEditActions = supportedStandardEditActions
         self.standardEditActionHandler = standardEditActionHandler
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
 }
 
@@ -315,6 +319,7 @@ extension ResponsiveTextField: UIViewRepresentable {
         textField.textAlignment = textAlignment
         textField.returnKeyType = returnKeyType
         textField.delegate = context.coordinator
+        textField.accessibilityIdentifier = accessibilityIdentifier
         textField.addTarget(context.coordinator,
             action: #selector(Coordinator.textFieldTextChanged(_:)),
             for: .editingChanged
