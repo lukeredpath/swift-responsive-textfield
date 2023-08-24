@@ -13,7 +13,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "SnapshotTesting", url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.8.1"),
-        .package(name: "combine-schedulers", url: "https://github.com/pointfreeco/combine-schedulers.git", from: "0.5.3")
+        .package(name: "combine-schedulers", url: "https://github.com/pointfreeco/combine-schedulers.git", from: "1.0.0")
     ],
     targets: [
         .target(

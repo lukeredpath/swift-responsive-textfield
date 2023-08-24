@@ -10,6 +10,10 @@ extension Snapshotting where Value: View, Format == UIImage {
 }
 
 final class ResponsiveTextFieldTests: XCTestCase {
+    override class func setUp() {
+//        isRecording = true
+    }
+
     func testEmptyTextField() {
         assertSnapshot(
             matching: ResponsiveTextField(
