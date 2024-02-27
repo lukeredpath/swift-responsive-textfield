@@ -318,10 +318,14 @@ extension ResponsiveTextField: UIViewRepresentable {
         textField.textColor = textColor
         textField.textAlignment = textAlignment
         textField.returnKeyType = returnKeyType
-        textField.attributedPlaceholder = NSAttributedString(
-            string: "",
-            attributes: [NSAttributedString.Key.foregroundColor: self.placeholderColor]
-        )
+        
+        if let placeholder {
+            textField.attributedPlaceholder = NSAttributedString(
+                string: placeholder,
+                attributes: [NSAttributedString.Key.foregroundColor: self.placeholderColor]
+            )
+        }
+
         textField.delegate = context.coordinator
         textField.addTarget(context.coordinator,
             action: #selector(Coordinator.textFieldTextChanged(_:)),
@@ -348,10 +352,13 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.text = text.wrappedValue
         uiView.textColor = textColor
         uiView.textAlignment = textAlignment
-        uiView.attributedPlaceholder = NSAttributedString(
-            string: "",
-            attributes: [NSAttributedString.Key.foregroundColor: self.placeholderColor]
-        )
+
+        if let placeholder {
+            uiView.attributedPlaceholder = NSAttributedString(
+                string: placeholder,
+                attributes: [NSAttributedString.Key.foregroundColor: self.placeholderColor]
+            )
+        }
 
         if !adjustsFontForContentSizeCategory {
             // We should only support dynamic font changes using our own environment
