@@ -13,7 +13,7 @@ import CombineSchedulers
 ///
 public struct ResponsiveTextField {
     /// The text field placeholder string.
-    let placeholder: String
+    let placeholder: String?
 
     /// A binding to the text state that will hold the typed text
     let text: Binding<String>
@@ -123,7 +123,7 @@ public struct ResponsiveTextField {
     var standardEditActionHandler: StandardEditActionHandling<UITextField>?
 
     public init(
-        placeholder: String,
+        placeholder: String?,
         text: Binding<String>,
         isSecure: Bool = false,
         adjustsFontForContentSizeCategory: Bool = true,

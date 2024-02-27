@@ -2,12 +2,39 @@
   "object": {
     "pins": [
       {
+        "package": "combine-schedulers",
+        "repositoryURL": "https://github.com/pointfreeco/combine-schedulers.git",
+        "state": {
+          "branch": null,
+          "revision": "ec62f32d21584214a4b27c8cee2b2ad70ab2c38a",
+          "version": "0.11.0"
+        }
+      },
+      {
+        "package": "swift-concurrency-extras",
+        "repositoryURL": "https://github.com/pointfreeco/swift-concurrency-extras",
+        "state": {
+          "branch": null,
+          "revision": "479750bd98fac2e813fffcf2af0728b5b0085795",
+          "version": "0.1.1"
+        }
+      },
+      {
         "package": "SnapshotTesting",
         "repositoryURL": "https://github.com/pointfreeco/swift-snapshot-testing.git",
         "state": {
           "branch": null,
           "revision": "c466812aa2e22898f27557e2e780d3aad7a27203",
           "version": "1.8.2"
+        }
+      },
+      {
+        "package": "xctest-dynamic-overlay",
+        "repositoryURL": "https://github.com/pointfreeco/xctest-dynamic-overlay",
+        "state": {
+          "branch": null,
+          "revision": "50843cbb8551db836adec2290bb4bc6bac5c1865",
+          "version": "0.9.0"
         }
       }
     ]
