@@ -19,6 +19,10 @@ extension ResponsiveTextField {
         static let defaultValue: UIFont = .preferredFont(forTextStyle: .body)
     }
 
+    fileprivate struct PlaceholderColorKey: EnvironmentKey {
+        static let defaultValue: UIColor = UIColor.black.withAlphaComponent(0.25)
+    }
+
     fileprivate struct TextColorKey: EnvironmentKey {
         static let defaultValue: UIColor = .black
     }
@@ -47,6 +51,11 @@ extension EnvironmentValues {
     var textFieldFont: UIFont {
         get { self[ResponsiveTextField.FontKey.self] }
         set { self[ResponsiveTextField.FontKey.self] = newValue }
+    }
+
+    var textFieldPlaceholderColor: UIColor {
+        get { self[ResponsiveTextField.PlaceholderColorKey.self] }
+        set { self[ResponsiveTextField.PlaceholderColorKey.self] = newValue }
     }
 
     var textFieldTextColor: UIColor {

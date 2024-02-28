@@ -66,6 +66,22 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
+    func testPlaceholderTextFieldWithText() {
+        assertSnapshot(
+            matching: ResponsiveTextField(
+                placeholder: "Placeholder Text",
+                text: .constant("Textfield with some text"),
+                isSecure: false,
+                firstResponderDemand: nil,
+                configuration: .empty
+            )
+            .responsiveTextFieldTextColor(UIColor.systemBlue)
+            .padding(),
+            as: .fixedSizeTextFieldImage
+        )
+    }
+
+
     func testTextFieldCustomTextAlignment() {     
         assertSnapshot(
             matching: ResponsiveTextField(

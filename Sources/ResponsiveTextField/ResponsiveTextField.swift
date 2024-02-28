@@ -13,7 +13,7 @@ import CombineSchedulers
 ///
 public struct ResponsiveTextField {
     /// The text field placeholder string.
-    let placeholder: String
+    let placeholder: String?
 
     /// A binding to the text state that will hold the typed text
     let text: Binding<String>
@@ -55,6 +55,10 @@ public struct ResponsiveTextField {
     ///
     @Environment(\.textFieldFont)
     var font: UIFont
+
+    /// Sets the text field placeholder color - use the `.responsiveTextFieldPlaceholderColor()` modifier.
+    @Environment(\.textFieldPlaceholderColor)
+    var placeholderColor: UIColor
 
     /// When `true`, configures the text field to automatically adjust its font based on the content size category.
     ///
@@ -123,7 +127,7 @@ public struct ResponsiveTextField {
     var standardEditActionHandler: StandardEditActionHandling<UITextField>?
 
     public init(
-        placeholder: String,
+        placeholder: String?,
         text: Binding<String>,
         isSecure: Bool = false,
         adjustsFontForContentSizeCategory: Bool = true,
@@ -314,6 +318,14 @@ extension ResponsiveTextField: UIViewRepresentable {
         textField.textColor = textColor
         textField.textAlignment = textAlignment
         textField.returnKeyType = returnKeyType
+        
+        if let placeholder {
+            textField.attributedPlaceholder = NSAttributedString(
+                string: placeholder,
+                attributes: [NSAttributedString.Key.foregroundColor: self.placeholderColor]
+            )
+        }
+
         textField.delegate = context.coordinator
         textField.addTarget(context.coordinator,
             action: #selector(Coordinator.textFieldTextChanged(_:)),
@@ -340,6 +352,13 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.text = text.wrappedValue
         uiView.textColor = textColor
         uiView.textAlignment = textAlignment
+
+        if let placeholder {
+            uiView.attributedPlaceholder = NSAttributedString(
+                string: placeholder,
+                attributes: [NSAttributedString.Key.foregroundColor: self.placeholderColor]
+            )
+        }
 
         if !adjustsFontForContentSizeCategory {
             // We should only support dynamic font changes using our own environment
@@ -537,6 +556,11 @@ public extension View {
         environment(\.textFieldTextColor, color)
     }
 
+    /// Sets the text field placeholder text color on any child `ResponsiveTextField` views.
+    func responsiveTextFieldPlaceholderColor(_ color: UIColor) -> some View {
+        environment(\.textFieldPlaceholderColor, color)
+    }
+
     /// Sets the text field text alignment on any child `ResponsiveTextField` views.
     func responsiveTextFieldTextAlignment(_ alignment: NSTextAlignment) -> some View {
         environment(\.textFieldTextAlignment, alignment)
@@ -587,6 +611,7 @@ struct ResponsiveTextField_Previews: PreviewProvider {
             TextFieldPreview(configuration: .email, text: "example@example.com")
                 .responsiveTextFieldFont(.preferredFont(forTextStyle: .body))
                 .responsiveTextFieldTextColor(.systemBlue)
+                .responsiveTextFieldPlaceholderColor(.gray)
                 .previewLayout(.sizeThatFits)
                 .environment(\.sizeCategory, .extraExtraExtraLarge)
                 .previewDisplayName("Dynamic Font Size")
