@@ -16,6 +16,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
         }
     }
     
+    @MainActor
     func testEmptyTextField() {
         assertSnapshot(
             of: ResponsiveTextField(
@@ -29,6 +30,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testTextFieldWithText() {
         assertSnapshot(
             of: ResponsiveTextField(
@@ -42,6 +44,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSecureTextEntry() {
         assertSnapshot(
             of: ResponsiveTextField(
@@ -55,6 +58,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testTextFieldCustomTextStyle() {
         assertSnapshot(
             of: ResponsiveTextField(
@@ -71,7 +75,8 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
-    func testTextFieldCustomTextAlignment() {     
+    @MainActor
+    func testTextFieldCustomTextAlignment() {
         assertSnapshot(
             of: ResponsiveTextField(
                 placeholder: "Placeholder Text",

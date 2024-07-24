@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.10
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -20,10 +20,20 @@ let package = Package(
             name: "ResponsiveTextField",
             dependencies: [
                 .product(name: "CombineSchedulers", package: "combine-schedulers")
-            ]),
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
         .testTarget(
             name: "ResponsiveTextFieldTests",
             dependencies: ["ResponsiveTextField", "SnapshotTesting"],
-            exclude: ["__Snapshots__"]),
+            exclude: ["__Snapshots__"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        )
     ]
 )

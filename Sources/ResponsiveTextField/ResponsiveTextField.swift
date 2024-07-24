@@ -153,13 +153,14 @@ public struct ResponsiveTextField {
 
 // MARK: - Managing the first responder state
 
-public struct FirstResponderStateChangeHandler {
+@MainActor
+public struct FirstResponderStateChangeHandler: Sendable {
     /// A closure that will be called when the first responder state changes.
     ///
     /// - Parameters:
     ///     - Bool: A boolean indicating if the text field is now the first responder or not.
     ///
-    public var handleStateChange: (Bool) -> Void
+    public var handleStateChange: @Sendable @MainActor (Bool) -> Void
 
     /// Allows fine-grained control over if the text field should become the first responder.
     ///
@@ -169,7 +170,7 @@ public struct FirstResponderStateChangeHandler {
     /// If the responder change was triggered programatically by a `FirstResponderDemand`
     /// and this returns `false` the demand will still be marked as fulfilled and reset to `nil`.
     ///
-    public var canBecomeFirstResponder: (() -> Bool)?
+    public var canBecomeFirstResponder: (@Sendable @MainActor () -> Bool)?
 
     /// Allows fine-grained control over if the text field should resign the first responder.
     ///
@@ -179,21 +180,21 @@ public struct FirstResponderStateChangeHandler {
     /// If the responder change was triggered programatically by a `FirstResponderDemand`
     /// and this returns `false` the demand will still be marked as fulfilled and reset to `nil`.
     ///
-    public var canResignFirstResponder: (() -> Bool)?
+    public var canResignFirstResponder: (@Sendable @MainActor () -> Bool)?
 
     /// Initialises a state change handler with a `handleStateChange` callback.
     ///
     /// Most of the time this is the only callback that you will need to provide so this initialiser
     /// can be called with trailing closure syntax.
     ///
-    public init(handleStateChange: @escaping (Bool) -> Void) {
+    public init(handleStateChange: @escaping @Sendable @MainActor (Bool) -> Void) {
         self.handleStateChange = handleStateChange
     }
 
     public init(
-        handleStateChange: @escaping (Bool) -> Void,
-        canBecomeFirstResponder: (() -> Bool)? = nil,
-        canResignFirstResponder: (() -> Bool)? = nil
+        handleStateChange: @escaping @Sendable @MainActor (Bool) -> Void,
+        canBecomeFirstResponder: (@Sendable @MainActor () -> Bool)? = nil,
+        canResignFirstResponder: (@Sendable @MainActor () -> Bool)? = nil
     ) {
         self.handleStateChange = handleStateChange
         self.canBecomeFirstResponder = canBecomeFirstResponder
@@ -253,7 +254,8 @@ public struct FirstResponderStateChangeHandler {
     /// cycle completes using this method. You can pass in any suitable scheduler, such as `RunLoop.main` or
     /// `DispatchQueue.main`.
     ///
-    public func receive<S: Scheduler>(on scheduler: S, options: S.SchedulerOptions? = nil) -> Self {
+    public func receive<S: Scheduler>(on scheduler: S, options: S.SchedulerOptions? = nil) -> Self
+    where S: Sendable, S.SchedulerOptions: Sendable {
         return .init(
             handleStateChange: { isFirstResponder in
                 scheduler.schedule(options: options) {
@@ -288,7 +290,7 @@ extension FirstResponderStateChangeHandler {
 
 /// Represents a request to change the text field's first responder state.
 ///
-public enum FirstResponderDemand: Equatable {
+public enum FirstResponderDemand: Equatable, Sendable {
     /// The text field should become first responder on the next view update.
     case shouldBecomeFirstResponder
 
@@ -466,10 +468,10 @@ extension ResponsiveTextField {
     /// that you use in your app. Configurations are composable and can be combined to create more
     /// detailed configurations.
     ///
-    public struct Configuration {
-        var configure: (UITextField) -> Void
+    public struct Configuration: Sendable {
+        var configure: @MainActor @Sendable (UITextField) -> Void
 
-        public init(configure: @escaping (UITextField) -> Void) {
+        public init(configure: @escaping @MainActor @Sendable (UITextField) -> Void) {
             self.configure = configure
         }
 
