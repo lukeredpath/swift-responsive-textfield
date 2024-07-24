@@ -254,17 +254,31 @@ public struct FirstResponderStateChangeHandler: Sendable {
     /// cycle completes using this method. You can pass in any suitable scheduler, such as `RunLoop.main` or
     /// `DispatchQueue.main`.
     ///
-    public func receive<S: Scheduler>(on scheduler: S, options: S.SchedulerOptions? = nil) -> Self
-    where S: Sendable, S.SchedulerOptions: Sendable {
+    public func receive<S: Scheduler>(on scheduler: S, options: S.SchedulerOptions? = nil) -> Self {
+        let _scheduler = _Scheduler(scheduler: scheduler, options: options)
         return .init(
             handleStateChange: { isFirstResponder in
-                scheduler.schedule(options: options) {
+                _scheduler.schedule {
                     self.handleStateChange(isFirstResponder)
                 }
             },
             canBecomeFirstResponder: canBecomeFirstResponder,
             canResignFirstResponder: canResignFirstResponder
         )
+    }
+    
+    // Currently whilst DispatchQueue is unchecked sendable, RunLoop is not, and neither are
+    // their scheduler options so we need to wrap it in a small unchecked sendable value to
+    // cross the sendable boundary.
+    private struct _Scheduler<S: Scheduler>: @unchecked Sendable {
+        let scheduler: S
+        let options: S.SchedulerOptions?
+        
+        func schedule(_ action: @escaping @Sendable @MainActor () -> Void) {
+            scheduler.schedule(options: options) {
+                Task { @MainActor in action() }
+            }
+        }
     }
 }
 
