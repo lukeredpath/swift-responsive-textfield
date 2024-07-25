@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6ABA3EEE2C52A3580052571D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6ABA3EED2C52A3580052571D /* Localizable.xcstrings */; };
 		A328FAB125FD8A5300B9CE72 /* ResponsiveTextFieldApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328FAB025FD8A5300B9CE72 /* ResponsiveTextFieldApp.swift */; };
 		A328FAB325FD8A5300B9CE72 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328FAB225FD8A5300B9CE72 /* ContentView.swift */; };
 		A328FAB525FD8A5400B9CE72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A328FAB425FD8A5400B9CE72 /* Assets.xcassets */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6ABA3EED2C52A3580052571D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A328FAAD25FD8A5300B9CE72 /* ResponsiveTextFieldDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResponsiveTextFieldDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A328FAB025FD8A5300B9CE72 /* ResponsiveTextFieldApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveTextFieldApp.swift; sourceTree = "<group>"; };
 		A328FAB225FD8A5300B9CE72 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 				A328FAB425FD8A5400B9CE72 /* Assets.xcassets */,
 				A328FAB925FD8A5400B9CE72 /* Info.plist */,
 				A328FAB625FD8A5400B9CE72 /* Preview Content */,
+				6ABA3EED2C52A3580052571D /* Localizable.xcstrings */,
 			);
 			path = ResponsiveTextFieldDemo;
 			sourceTree = "<group>";
@@ -124,6 +127,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ar,
 			);
 			mainGroup = A328FAA425FD8A5300B9CE72;
 			productRefGroup = A328FAAE25FD8A5300B9CE72 /* Products */;
@@ -142,6 +146,7 @@
 			files = (
 				A328FAB825FD8A5400B9CE72 /* Preview Assets.xcassets in Resources */,
 				A328FAB525FD8A5400B9CE72 /* Assets.xcassets in Resources */,
+				6ABA3EEE2C52A3580052571D /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
