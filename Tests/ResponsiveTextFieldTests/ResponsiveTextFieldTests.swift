@@ -78,7 +78,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
     @MainActor
     func testPlaceholderTextFieldWithText() {
         assertSnapshot(
-            matching: ResponsiveTextField(
+            of: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
                 isSecure: false,
