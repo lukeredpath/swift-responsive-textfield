@@ -10,9 +10,16 @@ extension Snapshotting where Value: View, Format == UIImage {
 }
 
 final class ResponsiveTextFieldTests: XCTestCase {
+    override func invokeTest() {
+        withSnapshotTesting(record: .never) {
+            super.invokeTest()
+        }
+    }
+    
+    @MainActor
     func testEmptyTextField() {
         assertSnapshot(
-            matching: ResponsiveTextField(
+            of: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant(""),
                 isSecure: false,
@@ -23,9 +30,10 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testTextFieldWithText() {
         assertSnapshot(
-            matching: ResponsiveTextField(
+            of: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
                 isSecure: false,
@@ -36,9 +44,10 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testSecureTextEntry() {
         assertSnapshot(
-            matching: ResponsiveTextField(
+            of: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("ssh this is top secret"),
                 isSecure: true,
@@ -49,10 +58,10 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testTextFieldCustomTextStyle() {
-        XCTExpectFailure("Needs re-recording for iOS 15")
         assertSnapshot(
-            matching: ResponsiveTextField(
+            of: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
                 isSecure: false,
@@ -66,6 +75,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testPlaceholderTextFieldWithText() {
         assertSnapshot(
             matching: ResponsiveTextField(
@@ -81,10 +91,10 @@ final class ResponsiveTextFieldTests: XCTestCase {
         )
     }
 
-
-    func testTextFieldCustomTextAlignment() {     
+    @MainActor
+    func testTextFieldCustomTextAlignment() {
         assertSnapshot(
-            matching: ResponsiveTextField(
+            of: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
                 isSecure: false,
@@ -97,7 +107,7 @@ final class ResponsiveTextFieldTests: XCTestCase {
             named: "Center"
         )
         assertSnapshot(
-            matching: ResponsiveTextField(
+            of: ResponsiveTextField(
                 placeholder: "Placeholder Text",
                 text: .constant("Textfield with some text"),
                 isSecure: false,

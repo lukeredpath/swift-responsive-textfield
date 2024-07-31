@@ -93,6 +93,7 @@ struct ContentView: View {
                         configuration: .combine(.password, .lastOfChain),
                         onFirstResponderStateChanged: FirstResponderStateChangeHandler
                             .updates($isPasswordFirstResponder)
+                            .receive(on: RunLoop.main)
                             .animation(),
                         handleReturn: { passwordResponderDemand = .shouldResignFirstResponder },
                         handleDelete: {
