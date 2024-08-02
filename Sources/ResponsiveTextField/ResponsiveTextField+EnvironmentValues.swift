@@ -20,7 +20,7 @@ extension ResponsiveTextField {
     }
 
     fileprivate struct PlaceholderColorKey: EnvironmentKey {
-        static let defaultValue: UIColor = UIColor.black.withAlphaComponent(0.25)
+        static let defaultValue: UIColor = UIColor.placeholderText
     }
 
     fileprivate struct TextColorKey: EnvironmentKey {
