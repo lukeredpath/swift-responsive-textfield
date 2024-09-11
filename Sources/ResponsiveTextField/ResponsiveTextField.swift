@@ -369,6 +369,8 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.textColor = textColor
         uiView.textAlignment = textAlignment
 
+        uiView.reloadInputViews()
+
         if let placeholder {
             uiView.attributedPlaceholder = NSAttributedString(
                 string: placeholder,
