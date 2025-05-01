@@ -24,6 +24,9 @@ public struct ResponsiveTextField {
     /// some external state.
     let isSecure: Bool
 
+    /// Enables return key automatically.
+    let enablesReturnKeyAutomatically: Bool
+
     /// Can be used to programatically control the text field's first responder state.
     ///
     /// When the binding's wrapped value is set, it will cause the text field to try and become or resign first responder status
@@ -130,6 +133,7 @@ public struct ResponsiveTextField {
         placeholder: String?,
         text: Binding<String>,
         isSecure: Bool = false,
+        enablesReturnKeyAutomatically: Bool = false,
         adjustsFontForContentSizeCategory: Bool = true,
         firstResponderDemand: Binding<FirstResponderDemand?>? = nil,
         configuration: Configuration = .empty,
@@ -144,6 +148,7 @@ public struct ResponsiveTextField {
         self.text = text
         self.firstResponderDemand = firstResponderDemand
         self.isSecure = isSecure
+        self.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
         self.configuration = configuration
         self.adjustsFontForContentSizeCategory = adjustsFontForContentSizeCategory
         self.onFirstResponderStateChanged = onFirstResponderStateChanged
@@ -329,6 +334,7 @@ extension ResponsiveTextField: UIViewRepresentable {
         textField.text = text.wrappedValue
         textField.isEnabled = isEnabled
         textField.isSecureTextEntry = isSecure
+        textField.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
         textField.font = font
         textField.adjustsFontForContentSizeCategory = adjustsFontForContentSizeCategory
         textField.textColor = textColor
@@ -364,6 +370,7 @@ extension ResponsiveTextField: UIViewRepresentable {
     public func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.isEnabled = isEnabled
         uiView.isSecureTextEntry = isSecure
+        uiView.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
         uiView.returnKeyType = returnKeyType
         uiView.text = text.wrappedValue
         uiView.textColor = textColor
