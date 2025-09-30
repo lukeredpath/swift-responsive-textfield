@@ -12,8 +12,14 @@ let package = Package(
             targets: ["ResponsiveTextField"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.17.2"),
-        .package(url: "https://github.com/pointfreeco/combine-schedulers.git", from: "1.0.2")
+        .package(
+            url: "https://github.com/pointfreeco/swift-snapshot-testing.git",
+            from: "1.17.2"
+        ),
+        .package(
+            url: "https://github.com/pointfreeco/combine-schedulers.git",
+            from: "1.0.2"
+        )
     ],
     targets: [
         .target(
@@ -28,7 +34,10 @@ let package = Package(
         ),
         .testTarget(
             name: "ResponsiveTextFieldTests",
-            dependencies: ["ResponsiveTextField", "SnapshotTesting"],
+            dependencies: [
+                "ResponsiveTextField",
+                .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
+            ],
             exclude: ["__Snapshots__"],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency"),
