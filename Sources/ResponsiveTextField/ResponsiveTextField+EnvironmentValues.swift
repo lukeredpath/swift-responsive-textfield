@@ -24,7 +24,7 @@ extension ResponsiveTextField {
     }
 
     fileprivate struct TextColorKey: EnvironmentKey {
-        static let defaultValue: UIColor = .black
+        static let defaultValue: UIColor = .label
     }
 
     fileprivate struct TextAlignmentKey: EnvironmentKey {
