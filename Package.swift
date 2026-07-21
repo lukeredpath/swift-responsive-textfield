@@ -25,7 +25,11 @@ let package = Package(
         .target(
             name: "ResponsiveTextField",
             dependencies: [
-                .product(name: "CombineSchedulers", package: "combine-schedulers")
+                .product(
+                    name: "CombineSchedulers",
+                    package: "combine-schedulers",
+                    condition: .when(platforms: [.iOS])
+                )
             ],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency"),
