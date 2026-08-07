@@ -120,4 +120,66 @@ final class ResponsiveTextFieldTests: XCTestCase {
             named: "Right"
         )
     }
+
+    @MainActor
+    func testTextFieldInArabic() {
+        // Set the locale to Arabic
+        setLanguage("ar")
+
+        assertSnapshot(
+            of: ResponsiveTextField(
+                placeholder: "نص العنصر النائب", // Arabic for "Placeholder Text"
+                text: .constant(""),
+                isSecure: false,
+                firstResponderDemand: nil,
+                configuration: .empty
+            ).padding(),
+            as: .fixedSizeTextFieldImage,
+            named: "ArabicEmpty"
+        )
+
+        assertSnapshot(
+            of: ResponsiveTextField(
+                placeholder: "نص العنصر النائب",
+                text: .constant("نص في حقل الإدخال"),
+                isSecure: false,
+                firstResponderDemand: nil,
+                configuration: .empty
+            ).padding(),
+            as: .fixedSizeTextFieldImage,
+            named: "ArabicText"
+        )
+
+        // Reset to default language
+        setLanguage("en")
+    }
+
+    @MainActor
+    func testTextFieldWithDifferentConfigurations() {
+        let configurations: [(ResponsiveTextField.Configuration, String)] = [
+            (.empty, "Empty Configuration"),
+            (.password, "Password"),
+            (.autoclears, "Auto clear"),
+            (.email, "Email")
+        ]
+        
+        for (config, name) in configurations {
+            assertSnapshot(
+                of: ResponsiveTextField(
+                    placeholder: "Placeholder Text",
+                    text: .constant("Sample text"),
+                    isSecure: false,
+                    firstResponderDemand: nil,
+                    configuration: config
+                ).padding(),
+                as: .fixedSizeTextFieldImage,
+                named: name
+            )
+        }
+    }
+
+    private func setLanguage(_ language: String) {
+        UserDefaults.standard.set([language], forKey: "AppleLanguages")
+        UserDefaults.standard.synchronize()
+    }
 }

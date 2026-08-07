@@ -11,6 +11,9 @@ import Combine
 
 struct ContentView: View {
     @State
+    var fullName: String = ""
+    
+    @State
     var email: String = ""
 
     @State
@@ -60,7 +63,7 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 ResponsiveTextField(
-                    placeholder: "Email address",
+                    placeholder: "email_address_label",
                     text: $email,
                     firstResponderDemand: $emailResponderDemand.animation(),
                     configuration: .email,
@@ -86,7 +89,7 @@ struct ContentView: View {
 
                 HStack(alignment: .center) {
                     ResponsiveTextField(
-                        placeholder: "Password",
+                        placeholder: "password_label",
                         text: $password,
                         isSecure: hidePassword,
                         firstResponderDemand: $passwordResponderDemand.animation(),
@@ -113,24 +116,32 @@ struct ContentView: View {
                     }
                 }
                 .padding(.bottom)
+                
+                ResponsiveTextField(
+                          placeholder: "full_name_label",
+                          text: $fullName
+                      )
+                .responsiveKeyboardReturnType(.next)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.bottom)
 
-                Toggle("Editing Email?", isOn: isEditingEmail)
+                Toggle("editing_email_label", isOn: isEditingEmail)
                     .padding(.bottom)
 
-                Toggle("Editing Password?", isOn: isEditingPassword)
+                Toggle("editing_password_label", isOn: isEditingPassword)
                     .padding(.bottom)
 
-                Toggle("Hide Password?", isOn: $hidePassword)
+                Toggle("hide_password_label", isOn: $hidePassword)
                     .padding(.bottom)
 
-                Toggle("Enabled?", isOn: $isEnabled)
+                Toggle("enable_label", isOn: $isEnabled)
                     .padding(.bottom)
 
-                Button("Random password") {
+                Button("random_password_label") {
                     password = UUID().uuidString
                 }
 
-                Text("You typed the following email:")
+                Text("typed_email_label")
                     .padding(.bottom)
 
                 Text(email).font(.caption)

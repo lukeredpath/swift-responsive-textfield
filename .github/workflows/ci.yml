@@ -11,9 +11,9 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Build and Run Tests
-      uses: sersoft-gmbh/xcodebuild-action@v1.3
+      uses: sersoft-gmbh/xcodebuild-action@v3
       with:
         workspace: ResponsiveTextField.xcworkspace
         scheme: ResponsiveTextField
@@ -27,7 +27,7 @@ jobs:
         target: ResponsiveTextFieldTests.xctest
         is-spm: true
     - name: Publish to code climate
-      uses: paambaati/codeclimate-action@v3.0.0
+      uses: paambaati/codeclimate-action@v9.0.0
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       with:

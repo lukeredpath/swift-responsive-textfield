@@ -330,7 +330,7 @@ extension ResponsiveTextField: UIViewRepresentable {
         textField.handleDelete = handleDelete
         textField.supportedStandardEditActions = supportedStandardEditActions
         textField.standardEditActionHandler = standardEditActionHandler
-        textField.placeholder = placeholder
+        textField.placeholder = NSLocalizedString(placeholder ?? "Placeholder", comment: "Responsive TextField placeholder")
         textField.text = text.wrappedValue
         textField.isEnabled = isEnabled
         textField.isSecureTextEntry = isSecure
@@ -342,8 +342,10 @@ extension ResponsiveTextField: UIViewRepresentable {
         textField.returnKeyType = returnKeyType
         
         if let placeholder {
+            let localizedPlaceholder = NSLocalizedString(placeholder, comment: "")
+            
             textField.attributedPlaceholder = NSAttributedString(
-                string: placeholder,
+                string: localizedPlaceholder,
                 attributes: [NSAttributedString.Key.foregroundColor: self.placeholderColor]
             )
         }
@@ -377,8 +379,10 @@ extension ResponsiveTextField: UIViewRepresentable {
         uiView.textAlignment = textAlignment
 
         if let placeholder {
+            let localizedPlaceholder = NSLocalizedString(placeholder, comment: "")
+            
             uiView.attributedPlaceholder = NSAttributedString(
-                string: placeholder,
+                string: localizedPlaceholder,
                 attributes: [NSAttributedString.Key.foregroundColor: self.placeholderColor]
             )
         }
